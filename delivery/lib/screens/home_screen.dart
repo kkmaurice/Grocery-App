@@ -1,5 +1,7 @@
 import 'package:card_swiper/card_swiper.dart';
+import 'package:delivery/inner_screens/feeds_screen.dart';
 import 'package:delivery/provider/dartk_theme_provider.dart';
+import 'package:delivery/services/global_methods.dart';
 import 'package:delivery/services/utils.dart';
 import 'package:delivery/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +10,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:provider/provider.dart';
 
+import '../inner_screens/on_sale_screen.dart';
 import '../widgets/feed_items.dart';
 import '../widgets/on_sale_widget.dart';
 
@@ -60,7 +63,9 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               const SizedBox(height: 6,),
               TextButton(
-                onPressed: (() {}), 
+                onPressed: (() {
+                  GlobalMethods.navigateTo(context: context, routeName: OnSaleScreen.routeName);
+                }), 
                 child: TextWidget(text: 'View all', color: Colors.blue, textSize: 22,maxLines:1)),
                const SizedBox(height: 6,),
               Row(
@@ -98,7 +103,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     TextWidget(text: 'Our products', color: color, textSize: 22),
                     const Spacer(),
                     TextButton(
-                  onPressed: (() {}), 
+                  onPressed: (() {
+                    GlobalMethods.navigateTo(context: context, routeName: FeedsScreen.routName);
+                  }), 
                   child: TextWidget(text: 'Browse all', color: Colors.blue, textSize: 22,maxLines:1)),
                   ],
                 ),
