@@ -1,7 +1,6 @@
 import 'package:delivery/consts/theme_data.dart';
 import 'package:delivery/provider/dartk_theme_provider.dart';
 import 'package:delivery/screens/btm_bar.dart';
-import 'package:delivery/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';

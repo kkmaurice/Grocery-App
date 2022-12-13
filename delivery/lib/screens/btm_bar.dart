@@ -23,11 +23,11 @@ class _BottomBarScreenState extends State<BottomBarScreen> {
   
   int _selectedIndex = 0;
 
-  final List _pages = [
-    const HomeScreen(),
-    const CategoryScreen(),
-    const CartScreen(),
-    const UserScreen()
+  final List<Map<String, dynamic>> _pages = [
+    {'page' : const HomeScreen(), 'title' : 'Home Screen'},
+    {'page' : const CategoryScreen(), 'title' : 'Category Screen'},
+    {'page' : const CartScreen(), 'title' : 'Cart Screen'},
+    {'page' : const UserScreen(), 'title' : 'User Screen'}
   ];
 
   void _selectedPage(int index){
@@ -43,7 +43,10 @@ class _BottomBarScreenState extends State<BottomBarScreen> {
     bool _isDark = themeState.getDarkTheme;
 
     return Scaffold(
-      body: _pages[_selectedIndex],
+      // appBar: AppBar(
+      //   title: Text(_pages[_selectedIndex]['title']),
+      // ),
+      body: _pages[_selectedIndex]['page'],
       bottomNavigationBar: BottomNavigationBar(
         onTap: _selectedPage,
         type: BottomNavigationBarType.fixed,
@@ -52,7 +55,7 @@ class _BottomBarScreenState extends State<BottomBarScreen> {
         currentIndex: _selectedIndex,
         backgroundColor: _isDark ? Colors.cyan.shade900 : Colors.black38.withOpacity(0.5),
         unselectedItemColor: _isDark ? Colors.white : Colors.white,
-        selectedItemColor: _isDark ? Colors.lightBlue.shade900 : Colors.black87,
+        selectedItemColor: _isDark ? Colors.indigo.shade900 : Colors.black87,
         items: [
           BottomNavigationBarItem(
             icon: Icon(_selectedIndex == 0 ? IconlyBold.home: IconlyLight.home), 

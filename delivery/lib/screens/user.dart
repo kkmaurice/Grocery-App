@@ -1,4 +1,3 @@
-import 'dart:ui';
 
 import 'package:delivery/widgets/text_widget.dart';
 import 'package:flutter/gestures.dart';
@@ -16,12 +15,16 @@ class UserScreen extends StatefulWidget {
 }
 
 class _UserScreenState extends State<UserScreen> {
-
   TextEditingController _addressController = TextEditingController();
 
   @override
+  void dispose() {
+    _addressController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-     
     final themeState = context.read<DarkThemeProvider>();
     final color = themeState.getDarkTheme ? Colors.white : Colors.black;
 
@@ -35,33 +38,55 @@ class _UserScreenState extends State<UserScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(height: 5,),
-                  RichText(text: TextSpan(text: 'Hi,  ',
-                  style: const TextStyle(color: Colors.cyan,fontSize: 27,fontWeight: FontWeight.bold),
-                  children: [
-                    TextSpan(text: 'MyName',
-                    style: TextStyle(color: color,fontSize: 25,fontWeight: FontWeight.w600),
-                    recognizer: TapGestureRecognizer()..onTap =() => print('my name is '),
-                    )
-                  ]
-                  )
+                  const SizedBox(
+                    height: 5,
                   ),
-                  const SizedBox(height: 5,),
-                  TextWidget(text: 'adonyomaurice@gmail.com', color: color, textSize: 18),
-                  const SizedBox(height: 20,),
-                  const Divider(thickness: 2,),
-                  _listTile(
-                      title: 'Address',
-                      subtitle: 'My subtitle',
-                      icon: IconlyBold.activity,
+                  RichText(
+                      text: TextSpan(
+                          text: 'Hi,  ',
+                          style: const TextStyle(
+                              color: Colors.cyan,
+                              fontSize: 27,
+                              fontWeight: FontWeight.bold),
+                          children: [
+                        TextSpan(
+                          text: 'MyName',
+                          style: TextStyle(
+                              color: color,
+                              fontSize: 25,
+                              fontWeight: FontWeight.w600),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () => print('my name is '),
+                        )
+                      ])),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  TextWidget(
+                      text: 'adonyomaurice@gmail.com',
                       color: color,
-                      onPressed: () {
-                        Future.delayed(Duration.zero, () async {
-                          _showAddressDialog();
+                      textSize: 18),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  const Divider(
+                    thickness: 2,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Future.delayed(Duration.zero, () async {
+                         await _showAddressDialog();
                         });
-                         
-                      }
-                      ),
+                    },
+                    child: _listTile(
+                        title: 'Address',
+                        subtitle: 'My subtitle',
+                        icon: IconlyBold.activity,
+                        color: color,
+                        onPressed: () {
+                          
+                        }),
+                  ),
                   _listTile(
                       title: 'Orders',
                       icon: IconlyBold.bag,
@@ -83,7 +108,12 @@ class _UserScreenState extends State<UserScreen> {
                       color: color,
                       onPressed: () {}),
                   SwitchListTile(
-                      title: TextWidget(text: themeState.getDarkTheme? 'Dark mode' : 'Light mode', color: color, textSize: 18),
+                      title: TextWidget(
+                          text: themeState.getDarkTheme
+                              ? 'Dark mode'
+                              : 'Light mode',
+                          color: color,
+                          textSize: 22),
                       secondary: Icon(themeState.getDarkTheme
                           ? Icons.dark_mode_outlined
                           : Icons.light_mode_outlined),
@@ -93,11 +123,20 @@ class _UserScreenState extends State<UserScreen> {
                           themeState.setDarkTheme = value;
                         });
                       }),
-                  _listTile(
-                      title: 'Logout',
-                      icon: IconlyLight.logout,
-                      color: color,
-                      onPressed: () {}),
+                  GestureDetector(
+                    onTap: () {
+                      Future.delayed(Duration.zero, () async {
+                         await _logOutDialog();
+                        });
+                    },
+                    child: _listTile(
+                        title: 'Logout',
+                        icon: IconlyLight.logout,
+                        color: color,
+                        onPressed: () {
+                          
+                        }),
+                  ),
                 ],
               ),
             ),
@@ -107,29 +146,55 @@ class _UserScreenState extends State<UserScreen> {
     );
   }
 
-  Future<void> _showAddressDialog() async{
+  Future<void> _showAddressDialog() async {
     await showDialog(
-                          context: context, 
-                          builder: (context) {
-                            return AlertDialog(
-                              title: const Text('Update'),
-                              content: TextField(
-                                controller: _addressController,
-                                maxLines: 5,
-                                decoration: const InputDecoration(
-                                  hintText: 'Your address'
-                                ),
-                                onChanged: (value) {
-                                  _addressController.text = value;
-                                },
-                              ),
-                              actions: [
-                                TextButton(onPressed: (){}, 
-                                child: Text('update'))
-                              ],
-                            );
-                          }
-                          );
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('Update'),
+            content: TextField(
+              controller: _addressController,
+              maxLines: 5,
+              decoration: const InputDecoration(hintText: 'Your address'),
+              onChanged: (value) {
+                _addressController.text = value;
+                _addressController.selection = TextSelection.fromPosition(
+                      TextPosition(offset: _addressController.text.length));
+              },
+            ),
+            actions: [
+              TextButton(
+              onPressed: () {
+                
+              }, 
+              child: const Text('update'))],
+          );
+        });
+  }
+
+  Future<void> _logOutDialog() async {
+    await showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Row(
+              children: [
+                Image.asset('assets/images/warning-sign.png',width: 20,height: 20, fit: BoxFit.fill,),
+                const SizedBox(width: 10,),
+                const Text('Sign out')
+              ],
+            ),
+            content: const Text('Do you wanna signout?'),
+            actions: [
+              TextButton(onPressed: () {
+                if (Navigator.canPop(context)){
+                  Navigator.pop(context);
+                }
+              }, child: TextWidget(text: 'Cancel', color: Colors.cyan, textSize: 18)),
+              TextButton(onPressed: () {}, child: TextWidget(text: 'OK', color: Colors.red, textSize: 18))
+              ],
+          );
+        });
   }
 
   Widget _listTile(
@@ -152,3 +217,9 @@ class _UserScreenState extends State<UserScreen> {
     );
   }
 }
+
+// Widget _logoutDialog(List<int> listTile, int index) {
+//    listTile.forEach((element) {
+//     element.
+//     });
+// }
