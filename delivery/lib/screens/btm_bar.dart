@@ -1,16 +1,13 @@
 // ignore_for_file: unused_field, no_leading_underscores_for_local_identifiers
-
-import 'package:delivery/screens/cart.dart';
 import 'package:delivery/screens/categories.dart';
 import 'package:delivery/screens/home_screen.dart';
 import 'package:delivery/screens/user.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:provider/provider.dart';
 
 import '../provider/dartk_theme_provider.dart';
+import 'cart/cart_screen.dart';
 
 class BottomBarScreen extends StatefulWidget {
   const BottomBarScreen({super.key});
