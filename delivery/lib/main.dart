@@ -1,6 +1,7 @@
 import 'package:delivery/consts/theme_data.dart';
 import 'package:delivery/inner_screens/feeds_screen.dart';
 import 'package:delivery/inner_screens/on_sale_screen.dart';
+import 'package:delivery/inner_screens/product_details.dart';
 import 'package:delivery/provider/dartk_theme_provider.dart';
 import 'package:delivery/screens/btm_bar.dart';
 import 'package:delivery/widgets/on_sale_widget.dart';
@@ -52,7 +53,8 @@ class _MyAppState extends State<MyApp> {
         home: BottomBarScreen(),
         routes: {
           OnSaleScreen.routeName:(context) => const OnSaleScreen(),
-          FeedsScreen.routName:(context) => const FeedsScreen()
+          FeedsScreen.routName:(context) => const FeedsScreen(),
+          ProductDetails.routeName:(context) => const ProductDetails()
         },
       );
       },

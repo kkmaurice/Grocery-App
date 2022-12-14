@@ -1,3 +1,5 @@
+import 'package:delivery/inner_screens/product_details.dart';
+import 'package:delivery/services/global_methods.dart';
 import 'package:delivery/services/utils.dart';
 import 'package:delivery/widgets/heart_btn.dart';
 import 'package:delivery/widgets/price_widget.dart';
@@ -31,7 +33,7 @@ class _OnSaleWidgetState extends State<OnSaleWidget> {
         child: InkWell(
           borderRadius: BorderRadius.circular(12),
           onTap: () {
-            print('am clicked');
+            GlobalMethods.navigateTo(context: context, routeName: ProductDetails.routeName);
           },
           child: Padding(
             padding: const EdgeInsets.all(8.0),

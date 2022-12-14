@@ -1,3 +1,5 @@
+import 'package:delivery/inner_screens/product_details.dart';
+import 'package:delivery/services/global_methods.dart';
 import 'package:delivery/services/utils.dart';
 import 'package:delivery/widgets/heart_btn.dart';
 import 'package:delivery/widgets/price_widget.dart';
@@ -43,7 +45,9 @@ class _FeedsWidgetState extends State<FeedsWidget> {
         borderRadius: BorderRadius.circular(12),
         color: Theme.of(context).cardColor,
         child: InkWell(
-          onTap: () {},
+          onTap: () {
+            GlobalMethods.navigateTo(context: context, routeName: ProductDetails.routeName);
+          },
           borderRadius: BorderRadius.circular(12),
           child: Column(
             children: [

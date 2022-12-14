@@ -1,3 +1,4 @@
+import 'package:delivery/services/global_methods.dart';
 import 'package:delivery/widgets/heart_btn.dart';
 import 'package:delivery/widgets/text_widget.dart';
 import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
@@ -5,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../../inner_screens/product_details.dart';
 import '../../services/utils.dart';
 
 class CartWidget extends StatefulWidget {
@@ -37,7 +39,9 @@ class _CartWidgetState extends State<CartWidget> {
     final Color color = Utils(context: context).color;
 
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        GlobalMethods.navigateTo(context: context, routeName: ProductDetails.routeName);
+      },
       child: Row(
         children: [
           Expanded(
@@ -80,7 +84,15 @@ class _CartWidgetState extends State<CartWidget> {
                           width: size.width * 0.3,
                           child: Row(
                             children: [
-                              _quantityController(fct: (){}, icon: CupertinoIcons.minus, color: Colors.red),
+                              _quantityController(fct: (){
+                                if(_quantityTextController.text == '1'){
+                                  return;
+                                }else{
+                                  setState(() {
+                                    _quantityTextController.text = (int.parse(_quantityTextController.text) - 1).toString();
+                                  });
+                                }
+                              }, icon: CupertinoIcons.minus, color: Colors.red),
                               Flexible(
                                 flex: 1,
                                 child: TextField(
@@ -90,6 +102,7 @@ class _CartWidgetState extends State<CartWidget> {
                                   decoration: const InputDecoration(
                                     focusedBorder: UnderlineInputBorder(borderSide: BorderSide())
                                   ),
+                                  textAlign: TextAlign.center,
                                   inputFormatters: [
                                     FilteringTextInputFormatter.allow(RegExp('[0-9]'))
                                   ],
@@ -104,7 +117,13 @@ class _CartWidgetState extends State<CartWidget> {
                                   },
                                 ),
                               ),
-                              _quantityController(fct: (){}, icon: CupertinoIcons.add, color: Colors.green)
+                              _quantityController(
+                                fct: (){
+                                  setState(() {
+                                    _quantityTextController.text = (int.parse(_quantityTextController.text) + 1).toString();
+                                  });
+                                }, 
+                                icon: CupertinoIcons.add, color: Colors.green)
                             ],
                           ),
                         )
