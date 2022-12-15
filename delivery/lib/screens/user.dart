@@ -1,4 +1,10 @@
+import 'dart:async';
 
+import 'package:delivery/inner_screens/product_details.dart';
+import 'package:delivery/screens/orders/order_screen.dart';
+import 'package:delivery/screens/viewed_recently/viewed_recently.dart';
+import 'package:delivery/screens/wishlist/wishlist_screen.dart';
+import 'package:delivery/services/global_methods.dart';
 import 'package:delivery/widgets/text_widget.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -75,33 +81,58 @@ class _UserScreenState extends State<UserScreen> {
                   GestureDetector(
                     onTap: () {
                       Future.delayed(Duration.zero, () async {
-                         await _showAddressDialog();
-                        });
+                        await _showAddressDialog();
+                      });
                     },
                     child: _listTile(
                         title: 'Address',
                         subtitle: 'My subtitle',
                         icon: IconlyBold.activity,
                         color: color,
-                        onPressed: () {
-                          
-                        }),
+                        onPressed: () {}),
                   ),
-                  _listTile(
-                      title: 'Orders',
-                      icon: IconlyBold.bag,
+                  ListTile(
+                    title: TextWidget(
+                      text: 'Orders',
                       color: color,
-                      onPressed: () {}),
-                  _listTile(
-                      title: 'Whishlist',
-                      icon: IconlyLight.heart,
+                      textSize: 22,
+                      //isTitle: true,
+                    ),
+                    subtitle: TextWidget(text: '', color: color, textSize: 18),
+                    leading: const Icon(IconlyLight.bag2),
+                    trailing: const Icon(IconlyLight.arrowRight2),
+                    onTap: () {
+                      Navigator.pushNamed(context, OrderScreen.routeName);
+                    },
+                  ),
+                  ListTile(
+                    title: TextWidget(
+                      text: 'Whishlist',
                       color: color,
-                      onPressed: () {}),
-                  _listTile(
-                      title: 'Viewed',
-                      icon: IconlyLight.show,
+                      textSize: 22,
+                      //isTitle: true,
+                    ),
+                    subtitle: TextWidget(text: '', color: color, textSize: 18),
+                    leading: const Icon(IconlyLight.heart),
+                    trailing: const Icon(IconlyLight.arrowRight2),
+                    onTap: () {
+                      Navigator.pushNamed(context, WishList.routeName);
+                    },
+                  ),
+                  ListTile(
+                    title: TextWidget(
+                      text: 'Viewed',
                       color: color,
-                      onPressed: () {}),
+                      textSize: 22,
+                      //isTitle: true,
+                    ),
+                    subtitle: TextWidget(text: '', color: color, textSize: 18),
+                    leading: const Icon(IconlyLight.show),
+                    trailing: const Icon(IconlyLight.arrowRight2),
+                    onTap: () {
+                      Navigator.pushNamed(context, ViewedRecentlyScreen.routeName);
+                    },
+                  ),
                   _listTile(
                       title: 'Forgot password',
                       icon: IconlyLight.unlock,
@@ -126,16 +157,18 @@ class _UserScreenState extends State<UserScreen> {
                   GestureDetector(
                     onTap: () {
                       Future.delayed(Duration.zero, () async {
-                         await _logOutDialog();
-                        });
+                        await GlobalMethods.warningDialog(
+                            title: 'Sign out',
+                            subtitle: 'Do you wanna signout?',
+                            fct: () {},
+                            context: context);
+                      });
                     },
                     child: _listTile(
                         title: 'Logout',
                         icon: IconlyLight.logout,
                         color: color,
-                        onPressed: () {
-                          
-                        }),
+                        onPressed: () {}),
                   ),
                 ],
               ),
@@ -159,40 +192,12 @@ class _UserScreenState extends State<UserScreen> {
               onChanged: (value) {
                 _addressController.text = value;
                 _addressController.selection = TextSelection.fromPosition(
-                      TextPosition(offset: _addressController.text.length));
+                    TextPosition(offset: _addressController.text.length));
               },
             ),
             actions: [
-              TextButton(
-              onPressed: () {
-                
-              }, 
-              child: const Text('update'))],
-          );
-        });
-  }
-
-  Future<void> _logOutDialog() async {
-    await showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Row(
-              children: [
-                Image.asset('assets/images/warning-sign.png',width: 20,height: 20, fit: BoxFit.fill,),
-                const SizedBox(width: 10,),
-                const Text('Sign out')
-              ],
-            ),
-            content: const Text('Do you wanna signout?'),
-            actions: [
-              TextButton(onPressed: () {
-                if (Navigator.canPop(context)){
-                  Navigator.pop(context);
-                }
-              }, child: TextWidget(text: 'Cancel', color: Colors.cyan, textSize: 18)),
-              TextButton(onPressed: () {}, child: TextWidget(text: 'OK', color: Colors.red, textSize: 18))
-              ],
+              TextButton(onPressed: () {}, child: const Text('update'))
+            ],
           );
         });
   }
@@ -217,9 +222,3 @@ class _UserScreenState extends State<UserScreen> {
     );
   }
 }
-
-// Widget _logoutDialog(List<int> listTile, int index) {
-//    listTile.forEach((element) {
-//     element.
-//     });
-// }

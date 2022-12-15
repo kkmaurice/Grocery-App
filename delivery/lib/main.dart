@@ -4,6 +4,9 @@ import 'package:delivery/inner_screens/on_sale_screen.dart';
 import 'package:delivery/inner_screens/product_details.dart';
 import 'package:delivery/provider/dartk_theme_provider.dart';
 import 'package:delivery/screens/btm_bar.dart';
+import 'package:delivery/screens/orders/order_screen.dart';
+import 'package:delivery/screens/viewed_recently/viewed_recently.dart';
+import 'package:delivery/screens/wishlist/wishlist_screen.dart';
 import 'package:delivery/widgets/on_sale_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -52,9 +55,12 @@ class _MyAppState extends State<MyApp> {
         theme: Styles.themeData(context.watch<DarkThemeProvider>().getDarkTheme, context),
         home: BottomBarScreen(),
         routes: {
-          OnSaleScreen.routeName:(context) => const OnSaleScreen(),
-          FeedsScreen.routName:(context) => const FeedsScreen(),
-          ProductDetails.routeName:(context) => const ProductDetails()
+          OnSaleScreen.routeName: (context) => const OnSaleScreen(),
+          FeedsScreen.routName: (context) => const FeedsScreen(),
+          ProductDetails.routeName: (context) => const ProductDetails(),
+          WishList.routeName: (context) => const WishList(),
+          OrderScreen.routeName:(context) => const OrderScreen(),
+          ViewedRecentlyScreen.routeName:(context) => const ViewedRecentlyScreen()
         },
       );
       },

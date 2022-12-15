@@ -1,4 +1,5 @@
 import 'package:delivery/services/utils.dart';
+import 'package:delivery/widgets/back_widget.dart';
 import 'package:delivery/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
@@ -34,15 +35,7 @@ class _FeedsScreenState extends State<FeedsScreen> {
     
     return Scaffold(
       appBar: AppBar(
-        leading: InkWell(
-          onTap: () {
-            Navigator.pop(context);
-          },
-          child: Icon(
-            IconlyLight.arrowLeft2,
-            color: color,
-          ),
-        ),
+        leading: const BackWidget(),
         title: TextWidget(
             text: 'All products', color: color, textSize: 22, isTitle: true),
         actions: [
