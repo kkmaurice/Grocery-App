@@ -1,7 +1,7 @@
 // ignore_for_file: dead_code
 
 import 'package:delivery/screens/cart/cart_widget.dart';
-import 'package:delivery/screens/cart/empty_screen.dart';
+import 'package:delivery/widgets/empty_screen.dart';
 import 'package:delivery/services/global_methods.dart';
 import 'package:delivery/services/utils.dart';
 import 'package:delivery/widgets/text_widget.dart';
@@ -19,8 +19,12 @@ class CartScreen extends StatelessWidget {
     final Color color = Utils(context: context).color;
 
     return _isEmpty
-        ? const Center(
-            child: EmptyScreen(),
+        ? Center(
+            child: EmptyScreen(
+              buttontext: 'Shop now', 
+              imagePath: 'assets/images/cart.png', 
+              title: 'Your cart is empty', 
+              subtitle: 'Add something and make  me happy :)'),
           )
         : Scaffold(
             appBar: AppBar(
