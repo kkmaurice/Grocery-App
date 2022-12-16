@@ -3,6 +3,8 @@ import 'package:delivery/inner_screens/feeds_screen.dart';
 import 'package:delivery/inner_screens/on_sale_screen.dart';
 import 'package:delivery/inner_screens/product_details.dart';
 import 'package:delivery/provider/dartk_theme_provider.dart';
+import 'package:delivery/screens/Auth/login.dart';
+import 'package:delivery/screens/Auth/register.dart';
 import 'package:delivery/screens/btm_bar.dart';
 import 'package:delivery/screens/orders/order_screen.dart';
 import 'package:delivery/screens/viewed_recently/viewed_recently.dart';
@@ -53,14 +55,16 @@ class _MyAppState extends State<MyApp> {
         debugShowCheckedModeBanner: false,
         title: 'Grocery App',
         theme: Styles.themeData(context.watch<DarkThemeProvider>().getDarkTheme, context),
-        home: BottomBarScreen(),
+        home: const LoginScreen(),
         routes: {
           OnSaleScreen.routeName: (context) => const OnSaleScreen(),
           FeedsScreen.routName: (context) => const FeedsScreen(),
           ProductDetails.routeName: (context) => const ProductDetails(),
           WishList.routeName: (context) => const WishList(),
           OrderScreen.routeName:(context) => const OrderScreen(),
-          ViewedRecentlyScreen.routeName:(context) => const ViewedRecentlyScreen()
+          ViewedRecentlyScreen.routeName:(context) => const ViewedRecentlyScreen(),
+          LoginScreen.routeName:(context) => const LoginScreen(),
+          Register.routeName:(context) => const Register()
         },
       );
       },

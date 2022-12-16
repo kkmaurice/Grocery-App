@@ -10,6 +10,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:provider/provider.dart';
 
+import '../consts/contss.dart';
 import '../inner_screens/on_sale_screen.dart';
 import '../widgets/feed_items.dart';
 import '../widgets/on_sale_widget.dart';
@@ -23,12 +24,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
 
-  final List<String> _offerImages = [
-    'assets/images/offres/Offer1.jpg',
-    'assets/images/offres/Offer2.jpg',
-    'assets/images/offres/Offer3.jpg',
-    'assets/images/offres/Offer4.jpg'
-  ];
+  
 
   @override
   Widget build(BuildContext context) {
@@ -47,9 +43,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 height: size.height*0.33,
                 child: Swiper(
                 itemBuilder: (BuildContext context,int index){
-                  return Image.asset(_offerImages[index],fit: BoxFit.fill,);
+                  return Image.asset(Contss.offerImages[index],fit: BoxFit.fill,);
                 },
-                itemCount: _offerImages.length,
+                itemCount: Contss.offerImages.length,
                 autoplay: true,
                 pagination: const SwiperPagination(
                   alignment: Alignment.bottomCenter,
