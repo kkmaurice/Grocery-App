@@ -8,6 +8,7 @@ import '../../consts/contss.dart';
 import '../../widgets/auth_button.dart';
 import '../../widgets/google_button.dart';
 import '../../widgets/text_widget.dart';
+import 'forgot_password.dart';
 
 class Register extends StatefulWidget {
   const Register({super.key});
@@ -220,7 +221,9 @@ class _RegisterState extends State<Register> {
                   Align(
                     alignment: Alignment.topRight,
                     child: TextButton(
-                        onPressed: (() {}),
+                        onPressed: (() {
+                          GlobalMethods.navigateTo(context: context, routeName: ForgotPassword.routeName);
+                        }),
                         child: const Text(
                           'Forgot password',
                           maxLines: 1,

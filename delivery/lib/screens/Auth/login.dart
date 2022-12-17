@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:card_swiper/card_swiper.dart';
+import 'package:delivery/screens/Auth/forgot_password.dart';
 import 'package:delivery/screens/Auth/register.dart';
 import 'package:delivery/services/global_methods.dart';
 import 'package:delivery/widgets/auth_button.dart';
@@ -171,7 +172,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   Align(
                     alignment: Alignment.topRight,
                     child: TextButton(
-                        onPressed: (() {}),
+                        onPressed: (() {
+                          GlobalMethods.navigateTo(context: context, routeName: ForgotPassword.routeName);
+                        }),
                         child: const Text(
                           'Forgot password',
                           maxLines: 1,
@@ -185,7 +188,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   const SizedBox(
                     height: 10,
                   ),
-                  AuthButton(fct: () {}, buttonText: 'Login'),
+                  AuthButton(fct: _submitFormOnLogin, buttonText: 'Login'),
                   const SizedBox(
                     height: 10,
                   ),

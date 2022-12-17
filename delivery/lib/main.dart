@@ -3,6 +3,7 @@ import 'package:delivery/inner_screens/feeds_screen.dart';
 import 'package:delivery/inner_screens/on_sale_screen.dart';
 import 'package:delivery/inner_screens/product_details.dart';
 import 'package:delivery/provider/dartk_theme_provider.dart';
+import 'package:delivery/screens/Auth/forgot_password.dart';
 import 'package:delivery/screens/Auth/login.dart';
 import 'package:delivery/screens/Auth/register.dart';
 import 'package:delivery/screens/btm_bar.dart';
@@ -64,7 +65,8 @@ class _MyAppState extends State<MyApp> {
           OrderScreen.routeName:(context) => const OrderScreen(),
           ViewedRecentlyScreen.routeName:(context) => const ViewedRecentlyScreen(),
           LoginScreen.routeName:(context) => const LoginScreen(),
-          Register.routeName:(context) => const Register()
+          Register.routeName:(context) => const Register(),
+          ForgotPassword.routeName:(context) => const ForgotPassword()
         },
       );
       },
