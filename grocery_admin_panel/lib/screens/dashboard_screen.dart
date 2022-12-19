@@ -31,6 +31,7 @@ class DashboardScreen extends StatelessWidget {
               fct: () {
                 context.read<MenuController>().controlDashboarkMenu();
               },
+              title: 'Dashboard',
             ),
             TextWidget(text: 'Latest Products', color: color),
             const SizedBox(

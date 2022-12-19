@@ -43,10 +43,13 @@ class _AllProductsScreenState extends State<AllOrdersScreen> {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    Header(fct: () {
+                    Header(
+                      fct: () {
                       context.read<MenuController>().controlAllOrder();
-                    }),
-                    const SizedBox(height: 20,),
+                    },
+                    title: 'All orders',
+                    ),
+                    const SizedBox(height: 25,),
                     const Padding(
                       padding: EdgeInsets.all(8.0),
                       child: OrdersList(),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:grocery_admin_panel/consts/constants.dart';
 import 'package:grocery_admin_panel/services/utils.dart';
 
@@ -8,9 +9,13 @@ class Header extends StatelessWidget {
   const Header({
     Key? key,
     required this.fct,
+    required this.title,
+    this.isTextField = true,
   }) : super(key: key);
 
   final Function fct;
+  final String title;
+  final bool isTextField;
   @override
   Widget build(BuildContext context) {
      final theme = Utils(context).getTheme;
@@ -29,13 +34,13 @@ class Header extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
-              "Dashboard",
+              title,
               style: Theme.of(context).textTheme.headline6,
             ),
           ),
         if (Responsive.isDesktop(context))
           Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),
-        Expanded(
+      !isTextField ? Container() : Expanded(
           child: TextField(
             decoration: InputDecoration(
               hintText: "Search",
