@@ -298,4 +298,8 @@ class ProductProvider with ChangeNotifier{
   ProductModel findProdById(String productId){
     return _productsList.firstWhere((element) => element.id == productId, orElse: () => null as ProductModel);
   }
+  // Find products by category
+  List<ProductModel> findByCategory(String categoryName){
+    return _productsList.where((element) => element.productCategory.toLowerCase() == categoryName.toLowerCase()).toList();
+  }
 }

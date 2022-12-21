@@ -1,4 +1,5 @@
 import 'package:delivery/consts/theme_data.dart';
+import 'package:delivery/inner_screens/cat_screen.dart';
 import 'package:delivery/inner_screens/feeds_screen.dart';
 import 'package:delivery/inner_screens/on_sale_screen.dart';
 import 'package:delivery/inner_screens/product_details.dart';
@@ -8,6 +9,7 @@ import 'package:delivery/screens/Auth/forgot_password.dart';
 import 'package:delivery/screens/Auth/login.dart';
 import 'package:delivery/screens/Auth/register.dart';
 import 'package:delivery/screens/btm_bar.dart';
+import 'package:delivery/screens/categories.dart';
 import 'package:delivery/screens/orders/order_screen.dart';
 import 'package:delivery/screens/viewed_recently/viewed_recently.dart';
 import 'package:delivery/screens/wishlist/wishlist_screen.dart';
@@ -66,6 +68,7 @@ class _MyAppState extends State<MyApp> {
           WishList.routeName: (context) => const WishList(),
           OrderScreen.routeName:(context) => const OrderScreen(),
           ViewedRecentlyScreen.routeName:(context) => const ViewedRecentlyScreen(),
+          CategoryScreenProducts.routName:(context) => const CategoryScreenProducts(),
           LoginScreen.routeName:(context) => const LoginScreen(),
           Register.routeName:(context) => const Register(),
           ForgotPassword.routeName:(context) => const ForgotPassword()

@@ -1,0 +1,122 @@
+import 'package:delivery/consts/contss.dart';
+import 'package:delivery/services/utils.dart';
+import 'package:delivery/widgets/back_widget.dart';
+import 'package:delivery/widgets/empty_cat_prd.dart';
+import 'package:delivery/widgets/text_widget.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_iconly/flutter_iconly.dart';
+import 'package:provider/provider.dart';
+
+import '../providers/product_provider.dart';
+import '../widgets/feed_items.dart';
+import '../widgets/heart_btn.dart';
+
+class CategoryScreenProducts extends StatefulWidget {
+  const CategoryScreenProducts({super.key});
+
+  static const routName = '/category_screen';
+
+  @override
+  State<CategoryScreenProducts> createState() => _FeedsScreenState();
+}
+
+class _FeedsScreenState extends State<CategoryScreenProducts> {
+  final TextEditingController _searchController = TextEditingController();
+  final FocusNode _searchTextFocusNode = FocusNode();
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    _searchTextFocusNode.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final Color color = Utils(context: context).color;
+    final size = Utils(context: context).getScreenSize;
+
+    String catName = ModalRoute.of(context)!.settings.arguments as String;
+
+    final prod = context.watch<ProductProvider>();
+    final catProducts = prod.findByCategory(catName);
+
+    return Scaffold(
+            appBar: AppBar(
+              leading: const BackWidget(),
+              title: TextWidget(
+                  text: catName, color: color, textSize: 22, isTitle: true),
+              actions: [
+                GestureDetector(
+                  onTap: () {},
+                  child: Icon(
+                    IconlyBold.bag2,
+                    size: 32,
+                    color: color,
+                  ),
+                ),
+                const HeartBTN()
+              ],
+              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+              elevation: 0,
+            ),
+            body: catProducts.isEmpty
+        ? EmptyCatWidget(catName: catName)
+        : SingleChildScrollView(
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        top: 8, left: 8, bottom: 8, right: 10),
+                    child: SizedBox(
+                      height: kBottomNavigationBarHeight,
+                      child: TextField(
+                        controller: _searchController,
+                        focusNode: _searchTextFocusNode,
+                        onChanged: (value) {
+                          setState(() {});
+                        },
+                        decoration: InputDecoration(
+                            focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: const BorderSide(
+                                    color: Colors.greenAccent, width: 1)),
+                            enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: const BorderSide(
+                                    color: Colors.greenAccent, width: 1)),
+                            hintText: 'What\'s in your mind',
+                            prefixIcon: const Icon(Icons.search),
+                            suffix: IconButton(
+                                onPressed: (() {
+                                  _searchController.clear();
+                                  _searchTextFocusNode.unfocus();
+                                }),
+                                icon: Icon(
+                                  Icons.close,
+                                  color: _searchTextFocusNode.hasFocus
+                                      ? Colors.red
+                                      : color,
+                                ))),
+                      ),
+                    ),
+                  ),
+                  GridView.count(
+                    crossAxisCount: 2,
+                    shrinkWrap: true,
+                    padding: EdgeInsets.zero,
+                    //crossAxisSpacing: 10,
+                    //mainAxisSpacing: 10,
+                    physics: const NeverScrollableScrollPhysics(),
+                    childAspectRatio: size.width / (size.height * 0.6),
+                    children: List.generate(catProducts.length, (index) {
+                      return ChangeNotifierProvider.value(
+                          value: catProducts[index], child: FeedsWidget());
+                    }),
+                  )
+                ],
+              ),
+            ),
+          );
+  }
+}

@@ -1,3 +1,4 @@
+import 'package:delivery/inner_screens/cat_screen.dart';
 import 'package:delivery/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -23,7 +24,7 @@ class CategoriesWidget extends StatelessWidget {
     final _screenSize = MediaQuery.of(context).size;
     return InkWell(
       onTap: () {
-        print('Yes, have been tapped');
+        Navigator.of(context).pushNamed(CategoryScreenProducts.routName, arguments: catText);
       },
       child: Container(
         decoration: BoxDecoration(
