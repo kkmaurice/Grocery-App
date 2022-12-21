@@ -1,7 +1,9 @@
+import 'package:delivery/providers/product_provider.dart';
 import 'package:delivery/widgets/on_sale_widget.dart';
 import 'package:delivery/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
+import 'package:provider/provider.dart';
 
 import '../services/utils.dart';
 
@@ -16,6 +18,8 @@ class OnSaleScreen extends StatelessWidget {
     final size = Utils(context: context).getScreenSize;
     final Color color = Utils(context: context).color;
 
+    final onSale = context.watch<ProductProvider>().getOnSaleProducts;
+
     return Scaffold(
       appBar: AppBar(
         leading: InkWell(
@@ -29,7 +33,7 @@ class OnSaleScreen extends StatelessWidget {
        title: TextWidget(text: 'Products on sale', color: color, textSize: 22, isTitle: true),
       ),
         // ignore: dead_code
-        body: _isEmpty ? Center(
+        body: onSale.isEmpty ? Center(
           child: Column(
             children: [
               Padding(
@@ -53,8 +57,10 @@ class OnSaleScreen extends StatelessWidget {
             //mainAxisSpacing: 10,
             physics: const NeverScrollableScrollPhysics(),
             childAspectRatio: size.width / (size.height * 0.45),
-            children: List.generate(16, (index) {
-              return const OnSaleWidget();
+            children: List.generate(onSale.length, (index) {
+              return ChangeNotifierProvider.value(
+                value: onSale[index],
+                child: const OnSaleWidget());
             }),
           ),
         ),

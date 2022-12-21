@@ -3,6 +3,7 @@ import 'package:delivery/inner_screens/feeds_screen.dart';
 import 'package:delivery/inner_screens/on_sale_screen.dart';
 import 'package:delivery/inner_screens/product_details.dart';
 import 'package:delivery/provider/dartk_theme_provider.dart';
+import 'package:delivery/providers/product_provider.dart';
 import 'package:delivery/screens/Auth/forgot_password.dart';
 import 'package:delivery/screens/Auth/login.dart';
 import 'package:delivery/screens/Auth/register.dart';
@@ -49,14 +50,15 @@ class _MyAppState extends State<MyApp> {
     
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => DarkThemeProvider())
+        ChangeNotifierProvider(create: (context) => DarkThemeProvider()),
+        ChangeNotifierProvider(create: (context) => ProductProvider())
       ],
       builder: (context, child) {
         return MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Grocery App',
         theme: Styles.themeData(context.watch<DarkThemeProvider>().getDarkTheme, context),
-        home: const LoginScreen(),
+        home: const BottomBarScreen(),
         routes: {
           OnSaleScreen.routeName: (context) => const OnSaleScreen(),
           FeedsScreen.routName: (context) => const FeedsScreen(),

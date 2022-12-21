@@ -1,4 +1,5 @@
 import 'package:delivery/inner_screens/product_details.dart';
+import 'package:delivery/models/product_models.dart';
 import 'package:delivery/services/global_methods.dart';
 import 'package:delivery/services/utils.dart';
 import 'package:delivery/widgets/heart_btn.dart';
@@ -9,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
+import 'package:provider/provider.dart';
 
 class OnSaleWidget extends StatefulWidget {
   const OnSaleWidget({super.key});
@@ -25,6 +27,8 @@ class _OnSaleWidgetState extends State<OnSaleWidget> {
     final size = Utils(context: context).getScreenSize;
     final Color color = Utils(context: context).color;
 
+    final onSaleproduct = context.watch<ProductModel>();
+
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Material(
@@ -33,7 +37,8 @@ class _OnSaleWidgetState extends State<OnSaleWidget> {
         child: InkWell(
           borderRadius: BorderRadius.circular(12),
           onTap: () {
-            GlobalMethods.navigateTo(context: context, routeName: ProductDetails.routeName);
+            Navigator.of(context).pushNamed(ProductDetails.routeName, arguments: onSaleproduct.id);
+            // GlobalMethods.navigateTo(context: context, routeName: ProductDetails.routeName);
           },
           child: Padding(
             padding: const EdgeInsets.all(8.0),
@@ -44,14 +49,18 @@ class _OnSaleWidgetState extends State<OnSaleWidget> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     FancyShimmerImage(
-                      imageUrl: 'https://media.istockphoto.com/id/182892715/photo/close-up-of-a-yellow-red-apricot-isolated-on-white.jpg?b=1&s=170667a&w=0&k=20&c=Qig2N65afkqn7byIySmpENKVyWm0jDLULKs5vwx5v00=',
+                      imageUrl: onSaleproduct.imageUrl,
                       height: size.height*0.10,
                       width: size.width*0.22,
                       boxFit: BoxFit.fill,
                       ),
                     Column(
                       children: [
-                        TextWidget(text: '1KG', color: color, textSize: 22, isTitle: true,),
+                        TextWidget(
+                          text: onSaleproduct.isPiece ? '1Piece' : '1KG', 
+                        color: color, 
+                        textSize: 20, 
+                        isTitle: true,),
                         const SizedBox(height: 6,),
                         Row(
                           children: [
@@ -73,13 +82,16 @@ class _OnSaleWidgetState extends State<OnSaleWidget> {
                     )
                   ],
                 ),
-                 const PriceWidget(
-                  price: 3.45, 
+                  PriceWidget(
+                  price: onSaleproduct.price, 
                   textPrice: '1', 
                   isOnSale: true, 
-                  salePrice: 2.11),
+                  salePrice: onSaleproduct.salePrice),
                  const SizedBox(height: 5,),
-                 TextWidget(text: 'Product price', color: color, textSize: 16, isTitle: true,)
+                 TextWidget(
+                  text: onSaleproduct.title, 
+                  color: color, textSize: 16, 
+                  isTitle: true,)
               ],
             ),
             ),

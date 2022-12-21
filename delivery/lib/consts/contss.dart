@@ -1,3 +1,5 @@
+import 'package:delivery/models/product_models.dart';
+
 class Contss {
   static const List<String> offerImages = [
     'assets/images/offres/Offer1.jpg',
@@ -15,4 +17,5 @@ class Contss {
     'assets/images/landing/store.jpg',
     'assets/images/landing/vergtablebg.jpg',
   ];
+
 }

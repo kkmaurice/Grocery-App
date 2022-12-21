@@ -1,5 +1,6 @@
 // ignore_for_file: avoid_unnecessary_containers
 
+import 'package:delivery/providers/product_provider.dart';
 import 'package:delivery/widgets/heart_btn.dart';
 import 'package:delivery/widgets/text_widget.dart';
 import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
@@ -7,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
+import 'package:provider/provider.dart';
 
 import '../services/utils.dart';
 
@@ -39,6 +41,15 @@ class _ProductDetailsState extends State<ProductDetails> {
     final size = Utils(context: context).getScreenSize;
     final Color color = Utils(context: context).color;
 
+    
+    final productId = ModalRoute.of(context)!.settings.arguments as String;
+
+    final product = context.watch<ProductProvider>().findProdById(productId);
+
+    final double usedPrice = product.isOnSale ? product.salePrice: product.price;
+    final double totalPrice = usedPrice * int.parse(_quantityTextController.text);
+    final String unitText = product.isPiece ? 'Piece' : 'Kg';
+
     return Scaffold(
       appBar: AppBar(
         leading: InkWell(
@@ -59,8 +70,7 @@ class _ProductDetailsState extends State<ProductDetails> {
           Flexible(
             flex: 2,
             child: FancyShimmerImage(
-              imageUrl:
-                  'https://media.istockphoto.com/id/182892715/photo/close-up-of-a-yellow-red-apricot-isolated-on-white.jpg?b=1&s=170667a&w=0&k=20&c=Qig2N65afkqn7byIySmpENKVyWm0jDLULKs5vwx5v00=',
+              imageUrl: product.imageUrl,
               boxFit: BoxFit.fill,
             ),
           ),
@@ -83,7 +93,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                         children: [
                           Flexible(
                               child: TextWidget(
-                                  text: 'title',
+                                  text: product.title,
                                   color: color,
                                   textSize: 18,
                                   isTitle: true)),
@@ -99,12 +109,12 @@ class _ProductDetailsState extends State<ProductDetails> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           TextWidget(
-                              text: '\$2.59',
+                              text: '\$${product.salePrice}/',
                               color: Colors.green,
                               textSize: 22,
                               isTitle: true),
                           TextWidget(
-                              text: '/Kg',
+                              text: product.isPiece ? 'Piece' : '/Kg',
                               color: color,
                               textSize: 12,
                               isTitle: false),
@@ -112,9 +122,9 @@ class _ProductDetailsState extends State<ProductDetails> {
                             width: 10,
                           ),
                           Visibility(
-                              visible: true,
+                              visible: product.isOnSale ? true : false,
                               child: Text(
-                                '\$3.9',
+                                '\$${product.price}',
                                 style: TextStyle(
                                     fontSize: 15,
                                     color: color,
@@ -225,12 +235,12 @@ class _ProductDetailsState extends State<ProductDetails> {
                                   child: Row(
                                 children: [
                                   TextWidget(
-                                      text: '\$2.59',
+                                      text: '\$${totalPrice.toStringAsFixed(2)}/',
                                       color: color,
                                       textSize: 20,
                                       isTitle: true),
                                   TextWidget(
-                                    text: '/${_quantityTextController.text}Kg',
+                                    text: '${_quantityTextController.text}$unitText',
                                     color: color,
                                     textSize: 16,
                                     isTitle: false,

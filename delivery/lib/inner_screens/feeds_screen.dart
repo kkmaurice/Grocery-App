@@ -1,9 +1,12 @@
+import 'package:delivery/consts/contss.dart';
 import 'package:delivery/services/utils.dart';
 import 'package:delivery/widgets/back_widget.dart';
 import 'package:delivery/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
+import 'package:provider/provider.dart';
 
+import '../providers/product_provider.dart';
 import '../widgets/feed_items.dart';
 import '../widgets/heart_btn.dart';
 
@@ -32,6 +35,9 @@ class _FeedsScreenState extends State<FeedsScreen> {
   Widget build(BuildContext context) {
     final Color color = Utils(context: context).color;
     final size = Utils(context: context).getScreenSize;
+
+    final prod = context.watch<ProductProvider>();
+    final products = prod.getProducts;
     
     return Scaffold(
       appBar: AppBar(
@@ -56,7 +62,7 @@ class _FeedsScreenState extends State<FeedsScreen> {
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.only(top: 8, left: 8, bottom: 8, right: 10),
               child: SizedBox(
                 height: kBottomNavigationBarHeight,
                 child: TextField(
@@ -98,8 +104,10 @@ class _FeedsScreenState extends State<FeedsScreen> {
                 //mainAxisSpacing: 10,
                 physics: const NeverScrollableScrollPhysics(),
                 childAspectRatio: size.width / (size.height*0.6),
-                children: List.generate(20, (index) {
-                  return const FeedsWidget();
+                children: List.generate(products.length, (index) {
+                  return ChangeNotifierProvider.value(
+                    value: products[index],
+                    child: FeedsWidget());
                 }),
                 )
           ],
