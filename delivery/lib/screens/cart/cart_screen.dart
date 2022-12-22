@@ -30,7 +30,10 @@ class CartScreen extends StatelessWidget {
                   GlobalMethods.warningDialog(
                       title: 'Empty your cart',
                       subtitle: 'Are you sure?',
-                      fct: () {},
+                      fct: () {
+                        context.read<CartProvider>().clearCart();
+                        Navigator.of(context).pop();
+                      },
                       context: context);
                 }),
                 icon: const Icon(
@@ -59,7 +62,7 @@ class CartScreen extends StatelessWidget {
                         itemBuilder: ((context, index) {
                           return ChangeNotifierProvider.value(
                             value: cartItemList[index],
-                            child: const CartWidget());
+                            child: CartWidget(quantity: cartItemList[index].quantity));
                         })),
                   ),
                 ],

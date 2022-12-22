@@ -45,7 +45,7 @@ class _FeedsWidgetState extends State<FeedsWidget> {
 
      final product = context.watch<ProductModel>();
      final cartProvider = context.read<CartProvider>();
-     
+     bool? isInCart = cartProvider.getCartItems.containsKey(product.id);
 
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -147,7 +147,11 @@ class _FeedsWidgetState extends State<FeedsWidget> {
                 width: double.infinity,
                 child: TextButton(
                   onPressed: () {
-                    cartProvider.addProductsToCart(product.id, int.parse(_quantityController.text));
+                    if (isInCart){
+                      return;
+                    }else{
+                      cartProvider.addProductsToCart(product.id, int.parse(_quantityController.text));
+                    }
                   },
                   style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all(
@@ -159,7 +163,7 @@ class _FeedsWidgetState extends State<FeedsWidget> {
                                   bottomLeft: Radius.circular(12),
                                   bottomRight: Radius.circular(12))))),
                   child: TextWidget(
-                      text: 'Add to cart',
+                      text: !isInCart ?'Add to cart' : 'In cart',
                       maxLines: 1,
                       color: color,
                       textSize: 20),

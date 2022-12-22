@@ -31,6 +31,7 @@ class _OnSaleWidgetState extends State<OnSaleWidget> {
 
     final onSaleproduct = context.watch<ProductModel>();
     final cartProvider = context.read<CartProvider>();
+    bool? isInCart = cartProvider.getCartItems.containsKey(onSaleproduct.id);
 
 
     return Padding(
@@ -73,9 +74,9 @@ class _OnSaleWidgetState extends State<OnSaleWidget> {
                               cartProvider.addProductsToCart(onSaleproduct.id, 1);  
                               },
                               child: Icon(
-                                IconlyBold.bag2,
+                               isInCart ? IconlyBold.bag2 : IconlyLight.bag2,
                                 size: 32,
-                                color: color,
+                                color: isInCart? Colors.green: color,
                               ),
                             ),
                             const HeartBTN()

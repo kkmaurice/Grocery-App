@@ -1,4 +1,5 @@
 import 'package:delivery/models/cart_model.dart';
+import 'package:delivery/providers/cart_provider.dart';
 import 'package:delivery/providers/product_provider.dart';
 import 'package:delivery/services/global_methods.dart';
 import 'package:delivery/widgets/heart_btn.dart';
@@ -13,7 +14,11 @@ import '../../inner_screens/product_details.dart';
 import '../../services/utils.dart';
 
 class CartWidget extends StatefulWidget {
-  const CartWidget({super.key});
+  const CartWidget({
+    Key? key,
+    required this.quantity,
+  }) : super(key: key);
+  final int quantity;
 
   @override
   State<CartWidget> createState() => _CartWidgetState();
@@ -24,7 +29,7 @@ class _CartWidgetState extends State<CartWidget> {
 
   @override
   void initState() {
-    _quantityTextController.text = '1';
+    _quantityTextController.text = widget.quantity.toString();
     super.initState();
   }
 
@@ -47,8 +52,7 @@ class _CartWidgetState extends State<CartWidget> {
 
     return GestureDetector(
       onTap: () {
-        GlobalMethods.navigateTo(
-            context: context, routeName: ProductDetails.routeName);
+        Navigator.of(context).pushNamed(ProductDetails.routeName, arguments: cartModel.productId);
       },
       child: Row(
         children: [
@@ -92,18 +96,19 @@ class _CartWidgetState extends State<CartWidget> {
                             children: [
                               _quantityController(
                                   fct: () {
-                                    if (_quantityTextController.text == '1') {
+                                    if(_quantityTextController.text=='1'){
                                       return;
-                                    } else {
-                                      setState(() {
+                                    }else{
+                                      context.read<CartProvider>().decreaseQuantityByOne(cartModel.productId);
+                                     setState(() {
                                         _quantityTextController.text =
                                             (int.parse(_quantityTextController
                                                         .text) -
                                                     1)
                                                 .toString();
-                                      });
+                                      }); 
                                     }
-                                  },
+                                    },
                                   icon: CupertinoIcons.minus,
                                   color: Colors.red),
                               Flexible(
@@ -133,6 +138,7 @@ class _CartWidgetState extends State<CartWidget> {
                               ),
                               _quantityController(
                                   fct: () {
+                                    context.read<CartProvider>().increaseQuantityByOne(cartModel.productId);
                                     setState(() {
                                       _quantityTextController.text = (int.parse(
                                                   _quantityTextController
@@ -154,7 +160,9 @@ class _CartWidgetState extends State<CartWidget> {
                       child: Column(
                         children: [
                           InkWell(
-                            onTap: () {},
+                            onTap: () {
+                              context.read<CartProvider>().removeOneItem(cartModel.productId);
+                            },
                             child: const Padding(
                               padding: EdgeInsets.all(6.0),
                               child: Icon(

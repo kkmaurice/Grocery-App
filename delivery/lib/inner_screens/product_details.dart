@@ -1,5 +1,6 @@
 // ignore_for_file: avoid_unnecessary_containers
 
+import 'package:delivery/providers/cart_provider.dart';
 import 'package:delivery/providers/product_provider.dart';
 import 'package:delivery/widgets/heart_btn.dart';
 import 'package:delivery/widgets/text_widget.dart';
@@ -45,11 +46,13 @@ class _ProductDetailsState extends State<ProductDetails> {
     final productId = ModalRoute.of(context)!.settings.arguments as String;
 
     final getCurrProduct = context.watch<ProductProvider>().findProdById(productId);
+    final cartProvider = context.watch<CartProvider>();
 
     final double usedPrice = getCurrProduct.isOnSale ? getCurrProduct.salePrice: getCurrProduct.price;
+    
     final double totalPrice = usedPrice * int.parse(_quantityTextController.text);
     final String unitText = getCurrProduct.isPiece ? 'Piece' : 'Kg';
-
+    bool? isInCart = cartProvider.getCartItems.containsKey(getCurrProduct.id);
     return Scaffold(
       appBar: AppBar(
         leading: InkWell(
@@ -254,12 +257,18 @@ class _ProductDetailsState extends State<ProductDetails> {
                             color: Colors.green,
                             borderRadius: BorderRadius.circular(10),
                             child: InkWell(
-                              onTap: () {},
+                              onTap: () {
+                                if (isInCart){
+                                  return;
+                                }else{
+                                  context.read<CartProvider>().addProductsToCart(productId, int.parse(_quantityTextController.text));
+                                }
+                              },
                               borderRadius: BorderRadius.circular(10),
                               child: Padding(
                                 padding: const EdgeInsets.all(12.0),
                                 child: TextWidget(
-                                    text: 'Add to cart',
+                                    text: isInCart ? 'In cart' : 'Add to cart',
                                     color: Colors.white,
                                     textSize: 18),
                               ),
