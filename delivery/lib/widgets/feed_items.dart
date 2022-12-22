@@ -1,8 +1,7 @@
 import 'package:delivery/inner_screens/product_details.dart';
 import 'package:delivery/models/product_models.dart';
 import 'package:delivery/providers/cart_provider.dart';
-import 'package:delivery/providers/product_provider.dart';
-import 'package:delivery/services/global_methods.dart';
+import 'package:delivery/providers/whislist_provider.dart';
 import 'package:delivery/services/utils.dart';
 import 'package:delivery/widgets/heart_btn.dart';
 import 'package:delivery/widgets/price_widget.dart';
@@ -45,7 +44,9 @@ class _FeedsWidgetState extends State<FeedsWidget> {
 
      final product = context.watch<ProductModel>();
      final cartProvider = context.read<CartProvider>();
+     final wishlistProvider = context.read<WishListProvider>();
      bool? isInCart = cartProvider.getCartItems.containsKey(product.id);
+     bool? isInWishlist = wishlistProvider.getWishlistItems.containsKey(product.id);
 
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -54,9 +55,9 @@ class _FeedsWidgetState extends State<FeedsWidget> {
         color: Theme.of(context).cardColor,
         child: InkWell(
           onTap: () {
-            Navigator.of(context).pushNamed(ProductDetails.routeName, arguments: product.id);
-            // GlobalMethods.navigateTo(
-            //     context: context, routeName: ProductDetails.routeName);
+            Navigator.of(context).pushNamed(
+              ProductDetails.routeName, 
+              arguments: product.id);
           },
           borderRadius: BorderRadius.circular(12),
           child: Column(
@@ -84,7 +85,10 @@ class _FeedsWidgetState extends State<FeedsWidget> {
                           maxLines: 1,
                           isTitle: true,
                         )),
-                    const Flexible(flex: 1, child: HeartBTN())
+                    Flexible(
+                      flex: 1, 
+                      child: HeartBTN(productId: product.id, isInWishlist: isInWishlist,)
+                      )
                   ],
                 ),
               ),

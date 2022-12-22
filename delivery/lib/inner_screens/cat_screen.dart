@@ -7,7 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:provider/provider.dart';
 
+import '../models/product_models.dart';
 import '../providers/product_provider.dart';
+import '../providers/whislist_provider.dart';
 import '../widgets/feed_items.dart';
 import '../widgets/heart_btn.dart';
 
@@ -41,6 +43,10 @@ class _FeedsScreenState extends State<CategoryScreenProducts> {
     final prod = context.watch<ProductProvider>();
     final catProducts = prod.findByCategory(catName);
 
+    final product = context.watch<ProductModel>();
+    final wishListprovider = context.watch<WishListProvider>();
+    bool? isInWishlist = wishListprovider.getWishlistItems.containsKey(product.id);
+
     return Scaffold(
       appBar: AppBar(
         leading: const BackWidget(),
@@ -55,7 +61,10 @@ class _FeedsScreenState extends State<CategoryScreenProducts> {
               color: color,
             ),
           ),
-          const HeartBTN()
+           HeartBTN(
+            productId: '',
+            isInWishlist: isInWishlist,
+            )
         ],
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         elevation: 0,

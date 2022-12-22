@@ -1,4 +1,7 @@
 import 'package:delivery/consts/contss.dart';
+import 'package:delivery/models/product_models.dart';
+import 'package:delivery/providers/whislist_provider.dart';
+import 'package:delivery/screens/wishlist/wishlist_screen.dart';
 import 'package:delivery/services/utils.dart';
 import 'package:delivery/widgets/back_widget.dart';
 import 'package:delivery/widgets/text_widget.dart';
@@ -38,6 +41,10 @@ class _FeedsScreenState extends State<FeedsScreen> {
 
     final prod = context.watch<ProductProvider>();
     final products = prod.getProducts;
+
+    // final product = context.watch<ProductModel>();
+    // final wishListprovider = context.watch<WishListProvider>();
+    // bool? isInWishlist = wishListprovider.getWishlistItems.containsKey(product.id);
     
     return Scaffold(
       appBar: AppBar(
@@ -53,7 +60,10 @@ class _FeedsScreenState extends State<FeedsScreen> {
               color: color,
             ),
           ),
-          const HeartBTN()
+          //  HeartBTN(
+          //   productId: product.id,
+          //   isInWishlist: isInWishlist,
+          //   )
         ],
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         elevation: 0,

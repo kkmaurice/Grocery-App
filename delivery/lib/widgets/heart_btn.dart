@@ -1,12 +1,21 @@
+import 'package:delivery/providers/whislist_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
+import 'package:provider/provider.dart';
 
 import '../services/utils.dart';
 
 class HeartBTN extends StatelessWidget {
-  const HeartBTN({super.key});
+  HeartBTN({
+    Key? key,
+    required this.productId,
+    this.isInWishlist = false
+  }) : super(key: key);
+
+ final String productId;
+ bool? isInWishlist;
 
   @override
   Widget build(BuildContext context) {
@@ -14,12 +23,12 @@ class HeartBTN extends StatelessWidget {
 
     return GestureDetector(
       onTap: () {
-        print('heart button is printed');
+        context.read<WishListProvider>().addRemoveProductToWishlist(productId);
       },
       child: Icon(
-        IconlyLight.heart,
+        isInWishlist !=null && isInWishlist == true ? IconlyBold.heart : IconlyLight.heart,
         size: 32,
-        color: color,
+        color: isInWishlist !=null && isInWishlist == true ? Colors.red : color,
       ),
     );
   }

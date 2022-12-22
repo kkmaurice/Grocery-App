@@ -2,6 +2,7 @@
 
 import 'package:delivery/providers/cart_provider.dart';
 import 'package:delivery/providers/product_provider.dart';
+import 'package:delivery/providers/whislist_provider.dart';
 import 'package:delivery/widgets/heart_btn.dart';
 import 'package:delivery/widgets/text_widget.dart';
 import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
@@ -47,12 +48,15 @@ class _ProductDetailsState extends State<ProductDetails> {
 
     final getCurrProduct = context.watch<ProductProvider>().findProdById(productId);
     final cartProvider = context.watch<CartProvider>();
+    final wishListProvider = context.watch<WishListProvider>();
 
     final double usedPrice = getCurrProduct.isOnSale ? getCurrProduct.salePrice: getCurrProduct.price;
     
     final double totalPrice = usedPrice * int.parse(_quantityTextController.text);
     final String unitText = getCurrProduct.isPiece ? 'Piece' : 'Kg';
     bool? isInCart = cartProvider.getCartItems.containsKey(getCurrProduct.id);
+    bool? isInWishlist = wishListProvider.getWishlistItems.containsKey(getCurrProduct.id);
+
     return Scaffold(
       appBar: AppBar(
         leading: InkWell(
@@ -100,7 +104,10 @@ class _ProductDetailsState extends State<ProductDetails> {
                                   color: color,
                                   textSize: 18,
                                   isTitle: true)),
-                          const HeartBTN()
+                           HeartBTN(
+                            productId: getCurrProduct.id,
+                            isInWishlist: isInWishlist,
+                            )
                         ],
                       ),
                     ),

@@ -5,6 +5,7 @@ import 'package:delivery/inner_screens/on_sale_screen.dart';
 import 'package:delivery/inner_screens/product_details.dart';
 import 'package:delivery/provider/dartk_theme_provider.dart';
 import 'package:delivery/providers/product_provider.dart';
+import 'package:delivery/providers/whislist_provider.dart';
 import 'package:delivery/screens/Auth/forgot_password.dart';
 import 'package:delivery/screens/Auth/login.dart';
 import 'package:delivery/screens/Auth/register.dart';
@@ -56,7 +57,8 @@ class _MyAppState extends State<MyApp> {
       providers: [
         ChangeNotifierProvider(create: (context) => DarkThemeProvider()),
         ChangeNotifierProvider(create: (context) => ProductProvider()),
-        ChangeNotifierProvider(create: (context) => CartProvider())
+        ChangeNotifierProvider(create: (context) => CartProvider()),
+        ChangeNotifierProvider(create: (context) => WishListProvider())
       ],
       builder: (context, child) {
         return MaterialApp(

@@ -1,5 +1,6 @@
 import 'package:delivery/inner_screens/product_details.dart';
 import 'package:delivery/models/product_models.dart';
+import 'package:delivery/providers/whislist_provider.dart';
 import 'package:delivery/services/global_methods.dart';
 import 'package:delivery/services/utils.dart';
 import 'package:delivery/widgets/heart_btn.dart';
@@ -31,7 +32,9 @@ class _OnSaleWidgetState extends State<OnSaleWidget> {
 
     final onSaleproduct = context.watch<ProductModel>();
     final cartProvider = context.read<CartProvider>();
+    final wishlistProvider = context.watch<WishListProvider>();
     bool? isInCart = cartProvider.getCartItems.containsKey(onSaleproduct.id);
+    bool? isInWishlist = wishlistProvider.getWishlistItems.containsKey(onSaleproduct.id);
 
 
     return Padding(
@@ -79,7 +82,10 @@ class _OnSaleWidgetState extends State<OnSaleWidget> {
                                 color: isInCart? Colors.green: color,
                               ),
                             ),
-                            const HeartBTN()
+                             HeartBTN(
+                              productId: onSaleproduct.id,
+                              isInWishlist: isInWishlist,
+                              )
                           ],
                         ),
                          
