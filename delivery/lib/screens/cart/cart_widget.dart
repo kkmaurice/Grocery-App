@@ -1,3 +1,5 @@
+import 'package:delivery/models/cart_model.dart';
+import 'package:delivery/providers/product_provider.dart';
 import 'package:delivery/services/global_methods.dart';
 import 'package:delivery/widgets/heart_btn.dart';
 import 'package:delivery/widgets/text_widget.dart';
@@ -5,6 +7,7 @@ import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 
 import '../../inner_screens/product_details.dart';
 import '../../services/utils.dart';
@@ -17,7 +20,6 @@ class CartWidget extends StatefulWidget {
 }
 
 class _CartWidgetState extends State<CartWidget> {
-
   final TextEditingController _quantityTextController = TextEditingController();
 
   @override
@@ -34,24 +36,29 @@ class _CartWidgetState extends State<CartWidget> {
 
   @override
   Widget build(BuildContext context) {
-    
     final size = Utils(context: context).getScreenSize;
     final Color color = Utils(context: context).color;
 
+    final productProvider = context.watch<ProductProvider>();
+    final cartModel = context.watch<CartModel>();
+    final getCurrentProduct = productProvider.findProdById(cartModel.productId);
+
+    final double usedPrice = getCurrentProduct.isOnSale ? getCurrentProduct.salePrice: getCurrentProduct.price;
+
     return GestureDetector(
       onTap: () {
-        GlobalMethods.navigateTo(context: context, routeName: ProductDetails.routeName);
+        GlobalMethods.navigateTo(
+            context: context, routeName: ProductDetails.routeName);
       },
       child: Row(
         children: [
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.only(top: 10, left: 4,right: 4),
+              padding: const EdgeInsets.only(top: 10, left: 4, right: 4),
               child: Container(
                 decoration: BoxDecoration(
-                  color: Theme.of(context).cardColor.withOpacity(0.3),
-                  borderRadius: BorderRadius.circular(12)
-                ),
+                    color: Theme.of(context).cardColor.withOpacity(0.3),
+                    borderRadius: BorderRadius.circular(12)),
                 child: Row(
                   children: [
                     Padding(
@@ -59,11 +66,10 @@ class _CartWidgetState extends State<CartWidget> {
                       child: Container(
                         height: size.height * 0.10,
                         width: size.width * 0.3,
-                        decoration:
-                            BoxDecoration(borderRadius: BorderRadius.circular(12)),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12)),
                         child: FancyShimmerImage(
-                          imageUrl:
-                              'https://media.istockphoto.com/id/182892715/photo/close-up-of-a-yellow-red-apricot-isolated-on-white.jpg?b=1&s=170667a&w=0&k=20&c=Qig2N65afkqn7byIySmpENKVyWm0jDLULKs5vwx5v00=',
+                          imageUrl: getCurrentProduct.imageUrl,
                           boxFit: BoxFit.fill,
                         ),
                       ),
@@ -72,7 +78,7 @@ class _CartWidgetState extends State<CartWidget> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         TextWidget(
-                          text: 'Title',
+                          text: getCurrentProduct.title,
                           color: color,
                           textSize: 20,
                           isTitle: true,
@@ -84,15 +90,22 @@ class _CartWidgetState extends State<CartWidget> {
                           width: size.width * 0.3,
                           child: Row(
                             children: [
-                              _quantityController(fct: (){
-                                if(_quantityTextController.text == '1'){
-                                  return;
-                                }else{
-                                  setState(() {
-                                    _quantityTextController.text = (int.parse(_quantityTextController.text) - 1).toString();
-                                  });
-                                }
-                              }, icon: CupertinoIcons.minus, color: Colors.red),
+                              _quantityController(
+                                  fct: () {
+                                    if (_quantityTextController.text == '1') {
+                                      return;
+                                    } else {
+                                      setState(() {
+                                        _quantityTextController.text =
+                                            (int.parse(_quantityTextController
+                                                        .text) -
+                                                    1)
+                                                .toString();
+                                      });
+                                    }
+                                  },
+                                  icon: CupertinoIcons.minus,
+                                  color: Colors.red),
                               Flexible(
                                 flex: 1,
                                 child: TextField(
@@ -100,17 +113,18 @@ class _CartWidgetState extends State<CartWidget> {
                                   keyboardType: TextInputType.number,
                                   maxLines: 1,
                                   decoration: const InputDecoration(
-                                    focusedBorder: UnderlineInputBorder(borderSide: BorderSide())
-                                  ),
+                                      focusedBorder: UnderlineInputBorder(
+                                          borderSide: BorderSide())),
                                   textAlign: TextAlign.center,
                                   inputFormatters: [
-                                    FilteringTextInputFormatter.allow(RegExp('[0-9]'))
+                                    FilteringTextInputFormatter.allow(
+                                        RegExp('[0-9]'))
                                   ],
                                   onChanged: (value) {
                                     setState(() {
-                                      if(value.isEmpty){
+                                      if (value.isEmpty) {
                                         _quantityTextController.text = '1';
-                                      }else{
+                                      } else {
                                         return;
                                       }
                                     });
@@ -118,12 +132,17 @@ class _CartWidgetState extends State<CartWidget> {
                                 ),
                               ),
                               _quantityController(
-                                fct: (){
-                                  setState(() {
-                                    _quantityTextController.text = (int.parse(_quantityTextController.text) + 1).toString();
-                                  });
-                                }, 
-                                icon: CupertinoIcons.add, color: Colors.green)
+                                  fct: () {
+                                    setState(() {
+                                      _quantityTextController.text = (int.parse(
+                                                  _quantityTextController
+                                                      .text) +
+                                              1)
+                                          .toString();
+                                    });
+                                  },
+                                  icon: CupertinoIcons.add,
+                                  color: Colors.green)
                             ],
                           ),
                         )
@@ -135,25 +154,31 @@ class _CartWidgetState extends State<CartWidget> {
                       child: Column(
                         children: [
                           InkWell(
-                            onTap: () {
-                              
-                            },
+                            onTap: () {},
                             child: const Padding(
                               padding: EdgeInsets.all(6.0),
                               child: Icon(
                                 CupertinoIcons.cart_badge_minus,
                                 color: Colors.red,
                                 size: 20,
-                                ),
+                              ),
                             ),
                           ),
-                          const SizedBox(height: 5,),
+                          const SizedBox(
+                            height: 5,
+                          ),
                           const HeartBTN(),
-                          TextWidget(text: '\$0.29', color: color, textSize: 18, maxLines: 1)
+                          TextWidget(
+                              text: '\$$usedPrice',
+                              color: color,
+                              textSize: 18,
+                              maxLines: 1)
                         ],
                       ),
-                      ),
-                      const SizedBox(width: 7,)
+                    ),
+                    const SizedBox(
+                      width: 7,
+                    )
                   ],
                 ),
               ),
@@ -164,7 +189,8 @@ class _CartWidgetState extends State<CartWidget> {
     );
   }
 
-  Widget _quantityController({ required Function fct, required IconData icon, required Color color }) {
+  Widget _quantityController(
+      {required Function fct, required IconData icon, required Color color}) {
     return Flexible(
       flex: 2,
       child: Padding(

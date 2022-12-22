@@ -1,5 +1,6 @@
 import 'package:delivery/inner_screens/product_details.dart';
 import 'package:delivery/models/product_models.dart';
+import 'package:delivery/providers/cart_provider.dart';
 import 'package:delivery/providers/product_provider.dart';
 import 'package:delivery/services/global_methods.dart';
 import 'package:delivery/services/utils.dart';
@@ -43,6 +44,7 @@ class _FeedsWidgetState extends State<FeedsWidget> {
     final size = Utils(context: context).getScreenSize;
 
      final product = context.watch<ProductModel>();
+     final cartProvider = context.read<CartProvider>();
      
 
     return Padding(
@@ -144,7 +146,9 @@ class _FeedsWidgetState extends State<FeedsWidget> {
               SizedBox(
                 width: double.infinity,
                 child: TextButton(
-                  onPressed: (() {}),
+                  onPressed: () {
+                    cartProvider.addProductsToCart(product.id, int.parse(_quantityController.text));
+                  },
                   style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all(
                           Theme.of(context).cardColor),

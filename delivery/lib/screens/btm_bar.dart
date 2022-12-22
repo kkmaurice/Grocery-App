@@ -1,5 +1,6 @@
 // ignore_for_file: unused_field, no_leading_underscores_for_local_identifiers
 import 'package:badges/badges.dart';
+import 'package:delivery/providers/cart_provider.dart';
 import 'package:delivery/screens/categories.dart';
 import 'package:delivery/screens/home_screen.dart';
 import 'package:delivery/screens/user.dart';
@@ -39,6 +40,9 @@ class _BottomBarScreenState extends State<BottomBarScreen> {
     final themeState = context.read<DarkThemeProvider>();
     bool _isDark = themeState.getDarkTheme;
 
+    final cartProvider = context.watch<CartProvider>();
+    final cart = cartProvider.getCartItems.values.toList();
+
     return Scaffold(
       // appBar: AppBar(
       //   title: Text(_pages[_selectedIndex]['title']),
@@ -71,7 +75,9 @@ class _BottomBarScreenState extends State<BottomBarScreen> {
                     badgeColor: Colors.blue,
                     borderRadius: BorderRadius.circular(8),
                     position: BadgePosition.topEnd(top: -7, end: -7),
-                    badgeContent: FittedBox(child: TextWidget(text: '1', color: Colors.white, textSize: 14)),
+                    badgeContent: FittedBox(
+                        child: TextWidget(
+                            text: '${cart.length}', color: Colors.white, textSize: 14)),
                     child: Icon(_selectedIndex == 2
                         ? IconlyBold.buy
                         : IconlyLight.buy)),

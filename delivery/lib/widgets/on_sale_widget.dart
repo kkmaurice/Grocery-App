@@ -12,6 +12,8 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:provider/provider.dart';
 
+import '../providers/cart_provider.dart';
+
 class OnSaleWidget extends StatefulWidget {
   const OnSaleWidget({super.key});
 
@@ -28,6 +30,8 @@ class _OnSaleWidgetState extends State<OnSaleWidget> {
     final Color color = Utils(context: context).color;
 
     final onSaleproduct = context.watch<ProductModel>();
+    final cartProvider = context.read<CartProvider>();
+
 
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -66,7 +70,7 @@ class _OnSaleWidgetState extends State<OnSaleWidget> {
                           children: [
                             GestureDetector(
                               onTap: () {
-                                
+                              cartProvider.addProductsToCart(onSaleproduct.id, 1);  
                               },
                               child: Icon(
                                 IconlyBold.bag2,

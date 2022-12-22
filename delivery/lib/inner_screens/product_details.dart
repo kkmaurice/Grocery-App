@@ -44,11 +44,11 @@ class _ProductDetailsState extends State<ProductDetails> {
     
     final productId = ModalRoute.of(context)!.settings.arguments as String;
 
-    final product = context.watch<ProductProvider>().findProdById(productId);
+    final getCurrProduct = context.watch<ProductProvider>().findProdById(productId);
 
-    final double usedPrice = product.isOnSale ? product.salePrice: product.price;
+    final double usedPrice = getCurrProduct.isOnSale ? getCurrProduct.salePrice: getCurrProduct.price;
     final double totalPrice = usedPrice * int.parse(_quantityTextController.text);
-    final String unitText = product.isPiece ? 'Piece' : 'Kg';
+    final String unitText = getCurrProduct.isPiece ? 'Piece' : 'Kg';
 
     return Scaffold(
       appBar: AppBar(
@@ -70,7 +70,7 @@ class _ProductDetailsState extends State<ProductDetails> {
           Flexible(
             flex: 2,
             child: FancyShimmerImage(
-              imageUrl: product.imageUrl,
+              imageUrl: getCurrProduct.imageUrl,
               boxFit: BoxFit.fill,
             ),
           ),
@@ -93,7 +93,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                         children: [
                           Flexible(
                               child: TextWidget(
-                                  text: product.title,
+                                  text: getCurrProduct.title,
                                   color: color,
                                   textSize: 18,
                                   isTitle: true)),
@@ -109,12 +109,12 @@ class _ProductDetailsState extends State<ProductDetails> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           TextWidget(
-                              text: '\$${product.salePrice}/',
+                              text: '\$${getCurrProduct.salePrice}/',
                               color: Colors.green,
                               textSize: 22,
                               isTitle: true),
                           TextWidget(
-                              text: product.isPiece ? 'Piece' : '/Kg',
+                              text: getCurrProduct.isPiece ? 'Piece' : '/Kg',
                               color: color,
                               textSize: 12,
                               isTitle: false),
@@ -122,9 +122,9 @@ class _ProductDetailsState extends State<ProductDetails> {
                             width: 10,
                           ),
                           Visibility(
-                              visible: product.isOnSale ? true : false,
+                              visible: getCurrProduct.isOnSale ? true : false,
                               child: Text(
-                                '\$${product.price}',
+                                '\$${getCurrProduct.price}',
                                 style: TextStyle(
                                     fontSize: 15,
                                     color: color,

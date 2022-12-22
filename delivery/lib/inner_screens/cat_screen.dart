@@ -42,27 +42,27 @@ class _FeedsScreenState extends State<CategoryScreenProducts> {
     final catProducts = prod.findByCategory(catName);
 
     return Scaffold(
-            appBar: AppBar(
-              leading: const BackWidget(),
-              title: TextWidget(
-                  text: catName, color: color, textSize: 22, isTitle: true),
-              actions: [
-                GestureDetector(
-                  onTap: () {},
-                  child: Icon(
-                    IconlyBold.bag2,
-                    size: 32,
-                    color: color,
-                  ),
-                ),
-                const HeartBTN()
-              ],
-              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-              elevation: 0,
+      appBar: AppBar(
+        leading: const BackWidget(),
+        title: TextWidget(
+            text: catName, color: color, textSize: 22, isTitle: true),
+        actions: [
+          GestureDetector(
+            onTap: () {},
+            child: Icon(
+              IconlyBold.bag2,
+              size: 32,
+              color: color,
             ),
-            body: catProducts.isEmpty
-        ? EmptyCatWidget(catName: catName)
-        : SingleChildScrollView(
+          ),
+          const HeartBTN()
+        ],
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        elevation: 0,
+      ),
+      body: catProducts.isEmpty
+          ? EmptyCatWidget(catName: catName)
+          : SingleChildScrollView(
               child: Column(
                 children: [
                   Padding(
@@ -117,6 +117,6 @@ class _FeedsScreenState extends State<CategoryScreenProducts> {
                 ],
               ),
             ),
-          );
+    );
   }
 }
