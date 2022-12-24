@@ -1,13 +1,14 @@
 
 // ignore_for_file: dead_code
 
-import 'package:delivery/screens/orders/order_widget.dart';
+import 'package:delivery/providers/viewed_prod_provider.dart';
 import 'package:delivery/screens/viewed_recently/viewed_widget.dart';
 import 'package:delivery/widgets/back_widget.dart';
 import 'package:delivery/widgets/empty_screen.dart';
 import 'package:delivery/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
+import 'package:provider/provider.dart';
 
 import '../../services/global_methods.dart';
 import '../../services/utils.dart';
@@ -20,12 +21,15 @@ class ViewedRecentlyScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    bool _isEmpty = true;
+    //bool _isEmpty = true;
 
     final Color color = Utils(context: context).color;
     final size = Utils(context: context).getScreenSize;
 
-    return _isEmpty ? Center(
+    final viewProdProvider = context.watch<ViewedProdProvider>();
+    final viewProdItemList = viewProdProvider.getViewedlistItems.values.toList().reversed.toList();
+
+    return viewProdItemList.isEmpty ? Center(
       child: SafeArea(
         child: EmptyScreen(
           buttontext: 'Shop now', 
@@ -53,11 +57,13 @@ class ViewedRecentlyScreen extends StatelessWidget {
           children: [
             Expanded(
               child: ListView.builder(
-                itemCount: 10,
+                itemCount: viewProdItemList.length,
                 itemBuilder: ((context, index) {
-                  return const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 2, vertical: 20),
-                    child: ViewedWidget(),
+                  return  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 20),
+                    child: ChangeNotifierProvider.value(
+                      value: viewProdItemList[index],
+                      child: ViewedWidget()),
                   );
                 }), 
                 ),

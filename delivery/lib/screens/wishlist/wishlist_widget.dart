@@ -65,7 +65,7 @@ class WishListWidget extends StatelessWidget {
                           children: [
                             IconButton(
                                 onPressed: (() {
-                                  wishlistProvider.clearWishlist();
+                                 
                                 }),
                                 icon: Icon(
                                   IconlyLight.bag2,

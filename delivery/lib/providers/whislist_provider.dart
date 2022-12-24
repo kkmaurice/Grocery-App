@@ -15,10 +15,10 @@ class WishListProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void removeOneItem(String productId){
-    _wishlistItems.remove(productId);
-    notifyListeners();
-  }
+  // void removeOneItem(String productId){
+  //   _wishlistItems.remove(productId);
+  //   notifyListeners();
+  // }
 
   void clearWishlist(){
     _wishlistItems.clear();

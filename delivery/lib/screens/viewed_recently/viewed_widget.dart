@@ -1,6 +1,11 @@
+import 'package:delivery/models/viewed_model.dart';
+import 'package:delivery/providers/cart_provider.dart';
+import 'package:delivery/providers/product_provider.dart';
 import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_iconly/flutter_iconly.dart';
+import 'package:provider/provider.dart';
 
 import '../../inner_screens/product_details.dart';
 import '../../services/global_methods.dart';
@@ -15,33 +20,48 @@ class ViewedWidget extends StatelessWidget {
     final Color color = Utils(context: context).color;
     final size = Utils(context: context).getScreenSize;
 
+    final viewedModel = context.watch<ViewedRecently>();
+    final productProvider = context.watch<ProductProvider>();
+    final viewedCurr = productProvider.findProdById(viewedModel.productId);
+
+    final cartProvider = context.watch<CartProvider>();
+    bool? isInCart = cartProvider.getCartItems.containsKey(viewedCurr.id);
+
+    final usedPrice = viewedCurr.isOnSale ? viewedCurr.salePrice : viewedCurr.price;
+
     return ListTile(
       onTap: () {
-        GlobalMethods.navigateTo(
-            context: context, routeName: ProductDetails.routeName);
+        Navigator.of(context).pushNamed(ProductDetails.routeName, arguments: viewedModel.productId);
       },
       leading: Container(
         margin: const EdgeInsets.only(left: 8),
         width: size.width * 0.25,
         height: size.height * 0.15,
         child: FancyShimmerImage(
-          imageUrl:
-              'https://media.istockphoto.com/id/182892715/photo/close-up-of-a-yellow-red-apricot-isolated-on-white.jpg?b=1&s=170667a&w=0&k=20&c=Qig2N65afkqn7byIySmpENKVyWm0jDLULKs5vwx5v00=',
+          imageUrl: viewedCurr.imageUrl,
           boxFit: BoxFit.fill,
         ),
       ),
-      title: TextWidget(text: 'Title x12', color: color, textSize: 18, isTitle: true,),
-      subtitle: TextWidget(text: '\$12.8', color: color, textSize: 14),
+      title: TextWidget(text: viewedCurr.title, color: color, textSize: 18, isTitle: true,),
+      subtitle: TextWidget(text: '\$${usedPrice.toStringAsFixed(2)}', color: color, textSize: 14),
       trailing: Material(
         color: Colors.green,
-        borderRadius: BorderRadius.circular(15),
+        borderRadius: BorderRadius.circular(12),
         child: InkWell(
+          borderRadius: BorderRadius.circular(12),
           onTap: () {
-            
+            if(isInCart) {
+              return;
+            }else{
+              cartProvider.addProductsToCart(viewedCurr.id, 1);
+            }
           },
-          child: const Padding(
-            padding: EdgeInsets.all(10.0),
-            child: Icon(CupertinoIcons.add, color: Colors.white, size: 22,),
+          child: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Icon(
+              isInCart ?IconlyBold.plus : Icons.check, 
+              color: Colors.white, 
+              size: 20,),
           ),
         ),
       ),
