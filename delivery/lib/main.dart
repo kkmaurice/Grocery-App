@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:delivery/consts/theme_data.dart';
 import 'package:delivery/inner_screens/cat_screen.dart';
 import 'package:delivery/inner_screens/feeds_screen.dart';
@@ -11,19 +13,22 @@ import 'package:delivery/screens/Auth/forgot_password.dart';
 import 'package:delivery/screens/Auth/login.dart';
 import 'package:delivery/screens/Auth/register.dart';
 import 'package:delivery/screens/btm_bar.dart';
-import 'package:delivery/screens/categories.dart';
 import 'package:delivery/screens/orders/order_screen.dart';
 import 'package:delivery/screens/viewed_recently/viewed_recently.dart';
 import 'package:delivery/screens/wishlist/wishlist_screen.dart';
-import 'package:delivery/widgets/on_sale_widget.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import 'providers/cart_provider.dart';
 
-void main() {
+void main() async{
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: Platform.isWindows ? DefaultFirebaseOptions.web : DefaultFirebaseOptions.currentPlatform,
+  );
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((_) {
     runApp(MyApp());

@@ -1,11 +1,16 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:async';
 
-import 'package:delivery/inner_screens/product_details.dart';
+import 'package:delivery/consts/firebase_consts.dart';
+import 'package:delivery/screens/Auth/forgot_password.dart';
+import 'package:delivery/screens/Auth/login.dart';
 import 'package:delivery/screens/orders/order_screen.dart';
 import 'package:delivery/screens/viewed_recently/viewed_recently.dart';
 import 'package:delivery/screens/wishlist/wishlist_screen.dart';
 import 'package:delivery/services/global_methods.dart';
 import 'package:delivery/widgets/text_widget.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
@@ -28,6 +33,8 @@ class _UserScreenState extends State<UserScreen> {
     _addressController.dispose();
     super.dispose();
   }
+
+  final User? user = authInstance.currentUser;
 
   @override
   Widget build(BuildContext context) {
@@ -130,14 +137,24 @@ class _UserScreenState extends State<UserScreen> {
                     leading: const Icon(IconlyLight.show),
                     trailing: const Icon(IconlyLight.arrowRight2),
                     onTap: () {
-                      Navigator.pushNamed(context, ViewedRecentlyScreen.routeName);
+                      Navigator.pushNamed(
+                          context, ViewedRecentlyScreen.routeName);
                     },
                   ),
-                  _listTile(
-                      title: 'Forgot password',
-                      icon: IconlyLight.unlock,
+                  ListTile(
+                    title: TextWidget(
+                      text: 'Forgot password',
                       color: color,
-                      onPressed: () {}),
+                      textSize: 22,
+                      //isTitle: true,
+                    ),
+                    subtitle: TextWidget(text: '', color: color, textSize: 18),
+                    leading: const Icon(IconlyLight.unlock),
+                    trailing: const Icon(IconlyLight.arrowRight2),
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(builder: ((context) => const ForgotPassword())));
+                    },
+                  ),
                   SwitchListTile(
                       title: TextWidget(
                           text: themeState.getDarkTheme
@@ -156,19 +173,29 @@ class _UserScreenState extends State<UserScreen> {
                       }),
                   GestureDetector(
                     onTap: () {
-                      Future.delayed(Duration.zero, () async {
+                      if(user != null){
+                        Future.delayed(Duration.zero, () async {
                         await GlobalMethods.warningDialog(
                             title: 'Sign out',
-                            subtitle: 'Do you wanna signout?',
-                            fct: () {},
+                            subtitle: 'Do you wanna sign out?',
+                            fct: () async{
+                              await authInstance.signOut();
+                              Navigator.of(context).pushReplacement(MaterialPageRoute(builder: ((context) => const LoginScreen())));
+                            },
                             context: context);
                       });
+                      }else{
+                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => const LoginScreen()));
+                      }
+                      
                     },
                     child: _listTile(
-                        title: 'Logout',
-                        icon: IconlyLight.logout,
+                        title: user == null ? 'Login' : 'Logout',
+                        icon: user == null
+                            ? IconlyBold.login
+                            : IconlyLight.logout,
                         color: color,
-                        onPressed: () {}),
+                        onPressed: () { }),
                   ),
                 ],
               ),

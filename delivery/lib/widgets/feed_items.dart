@@ -7,16 +7,18 @@ import 'package:delivery/widgets/heart_btn.dart';
 import 'package:delivery/widgets/price_widget.dart';
 import 'package:delivery/widgets/text_widget.dart';
 import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
+import '../consts/firebase_consts.dart';
+import '../services/global_methods.dart';
+
 class FeedsWidget extends StatefulWidget {
-   FeedsWidget({
+  FeedsWidget({
     Key? key,
   }) : super(key: key);
-
- 
 
   @override
   State<FeedsWidget> createState() => _FeedsWidgetState();
@@ -42,11 +44,12 @@ class _FeedsWidgetState extends State<FeedsWidget> {
     final Color color = Utils(context: context).color;
     final size = Utils(context: context).getScreenSize;
 
-     final product = context.watch<ProductModel>();
-     final cartProvider = context.read<CartProvider>();
-     final wishlistProvider = context.read<WishListProvider>();
-     bool? isInCart = cartProvider.getCartItems.containsKey(product.id);
-     bool? isInWishlist = wishlistProvider.getWishlistItems.containsKey(product.id);
+    final product = context.watch<ProductModel>();
+    final cartProvider = context.read<CartProvider>();
+    final wishlistProvider = context.read<WishListProvider>();
+    bool? isInCart = cartProvider.getCartItems.containsKey(product.id);
+    bool? isInWishlist =
+        wishlistProvider.getWishlistItems.containsKey(product.id);
 
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -55,9 +58,8 @@ class _FeedsWidgetState extends State<FeedsWidget> {
         color: Theme.of(context).cardColor,
         child: InkWell(
           onTap: () {
-            Navigator.of(context).pushNamed(
-              ProductDetails.routeName, 
-              arguments: product.id);
+            Navigator.of(context)
+                .pushNamed(ProductDetails.routeName, arguments: product.id);
           },
           borderRadius: BorderRadius.circular(12),
           child: Column(
@@ -86,9 +88,11 @@ class _FeedsWidgetState extends State<FeedsWidget> {
                           isTitle: true,
                         )),
                     Flexible(
-                      flex: 1, 
-                      child: HeartBTN(productId: product.id, isInWishlist: isInWishlist,)
-                      )
+                        flex: 1,
+                        child: HeartBTN(
+                          productId: product.id,
+                          isInWishlist: isInWishlist,
+                        ))
                   ],
                 ),
               ),
@@ -111,7 +115,7 @@ class _FeedsWidgetState extends State<FeedsWidget> {
                           flex: 6,
                           child: FittedBox(
                             child: TextWidget(
-                                text: product.isPiece? 'Piece' : 'KG',
+                                text: product.isPiece ? 'Piece' : 'KG',
                                 color: color,
                                 textSize: 18,
                                 isTitle: true),
@@ -126,7 +130,6 @@ class _FeedsWidgetState extends State<FeedsWidget> {
                           key: const ValueKey('10'),
                           style: TextStyle(color: color, fontSize: 18),
                           keyboardType: TextInputType.number,
-                          
                           enabled: true,
                           inputFormatters: [
                             FilteringTextInputFormatter.allow(RegExp('[0-9.]'))
@@ -151,10 +154,18 @@ class _FeedsWidgetState extends State<FeedsWidget> {
                 width: double.infinity,
                 child: TextButton(
                   onPressed: () {
-                    if (isInCart){
+                    // if (isInCart){
+                    //   return;
+                    // }
+                    final User? user = authInstance.currentUser;
+                    if (user == null) {
+                      GlobalMethods.errorDialog(
+                          subtitle: 'No user found, Please login first',
+                          context: context);
                       return;
-                    }else{
-                      cartProvider.addProductsToCart(product.id, int.parse(_quantityController.text));
+                    } else {
+                      cartProvider.addProductsToCart(
+                          product.id, int.parse(_quantityController.text));
                     }
                   },
                   style: ButtonStyle(
@@ -167,7 +178,7 @@ class _FeedsWidgetState extends State<FeedsWidget> {
                                   bottomLeft: Radius.circular(12),
                                   bottomRight: Radius.circular(12))))),
                   child: TextWidget(
-                      text: !isInCart ?'Add to cart' : 'In cart',
+                      text: !isInCart ? 'Add to cart' : 'In cart',
                       maxLines: 1,
                       color: color,
                       textSize: 20),

@@ -7,12 +7,14 @@ import 'package:delivery/widgets/heart_btn.dart';
 import 'package:delivery/widgets/price_widget.dart';
 import 'package:delivery/widgets/text_widget.dart';
 import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:provider/provider.dart';
 
+import '../consts/firebase_consts.dart';
 import '../providers/cart_provider.dart';
 
 class OnSaleWidget extends StatefulWidget {
@@ -74,7 +76,16 @@ class _OnSaleWidgetState extends State<OnSaleWidget> {
                           children: [
                             GestureDetector(
                               onTap: () {
-                              cartProvider.addProductsToCart(onSaleproduct.id, 1);  
+                                final User? user = authInstance.currentUser;
+                                if (user == null) {
+                                  GlobalMethods.errorDialog(
+                                      subtitle:
+                                          'No user found, Please login first',
+                                      context: context);
+                                  return;
+                                }
+                                cartProvider.addProductsToCart(
+                                    onSaleproduct.id, 1);
                               },
                               child: Icon(
                                isInCart ? IconlyBold.bag2 : IconlyLight.bag2,

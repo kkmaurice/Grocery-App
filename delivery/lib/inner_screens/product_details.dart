@@ -7,12 +7,15 @@ import 'package:delivery/providers/whislist_provider.dart';
 import 'package:delivery/widgets/heart_btn.dart';
 import 'package:delivery/widgets/text_widget.dart';
 import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:provider/provider.dart';
 
+import '../consts/firebase_consts.dart';
+import '../services/global_methods.dart';
 import '../services/utils.dart';
 
 class ProductDetails extends StatefulWidget {
@@ -44,22 +47,26 @@ class _ProductDetailsState extends State<ProductDetails> {
     final size = Utils(context: context).getScreenSize;
     final Color color = Utils(context: context).color;
 
-    
     final productId = ModalRoute.of(context)!.settings.arguments as String;
 
-    final getCurrProduct = context.watch<ProductProvider>().findProdById(productId);
+    final getCurrProduct =
+        context.watch<ProductProvider>().findProdById(productId);
     final cartProvider = context.watch<CartProvider>();
     final wishListProvider = context.watch<WishListProvider>();
 
-    final double usedPrice = getCurrProduct.isOnSale ? getCurrProduct.salePrice: getCurrProduct.price;
-    
-    final double totalPrice = usedPrice * int.parse(_quantityTextController.text);
+    final double usedPrice = getCurrProduct.isOnSale
+        ? getCurrProduct.salePrice
+        : getCurrProduct.price;
+
+    final double totalPrice =
+        usedPrice * int.parse(_quantityTextController.text);
     final String unitText = getCurrProduct.isPiece ? 'Piece' : 'Kg';
     bool? isInCart = cartProvider.getCartItems.containsKey(getCurrProduct.id);
-    bool? isInWishlist = wishListProvider.getWishlistItems.containsKey(getCurrProduct.id);
+    bool? isInWishlist =
+        wishListProvider.getWishlistItems.containsKey(getCurrProduct.id);
 
     return WillPopScope(
-      onWillPop: () async{
+      onWillPop: () async {
         context.read<ViewedProdProvider>().addProductToHistory(productId);
         return true;
       },
@@ -110,10 +117,10 @@ class _ProductDetailsState extends State<ProductDetails> {
                                     color: color,
                                     textSize: 18,
                                     isTitle: true)),
-                             HeartBTN(
+                            HeartBTN(
                               productId: getCurrProduct.id,
                               isInWishlist: isInWishlist,
-                              )
+                            )
                           ],
                         ),
                       ),
@@ -171,13 +178,16 @@ class _ProductDetailsState extends State<ProductDetails> {
                         children: [
                           _quantityController(
                               fct: () {
-                                if(_quantityTextController.text == '1'){
-                                    return;
-                                  }else{
-                                    setState(() {
-                                      _quantityTextController.text = (int.parse(_quantityTextController.text) - 1).toString();
-                                    });
-                                  }
+                                if (_quantityTextController.text == '1') {
+                                  return;
+                                } else {
+                                  setState(() {
+                                    _quantityTextController.text = (int.parse(
+                                                _quantityTextController.text) -
+                                            1)
+                                        .toString();
+                                  });
+                                }
                               },
                               icon: CupertinoIcons.minus,
                               color: Colors.red),
@@ -195,7 +205,8 @@ class _ProductDetailsState extends State<ProductDetails> {
                                       borderSide: BorderSide())),
                               textAlign: TextAlign.center,
                               inputFormatters: [
-                                FilteringTextInputFormatter.allow(RegExp('[0-9]'))
+                                FilteringTextInputFormatter.allow(
+                                    RegExp('[0-9]'))
                               ],
                               onChanged: (value) {
                                 setState(() {
@@ -214,7 +225,10 @@ class _ProductDetailsState extends State<ProductDetails> {
                           _quantityController(
                               fct: () {
                                 setState(() {
-                                  _quantityTextController.text = (int.parse(_quantityTextController.text) + 1).toString();
+                                  _quantityTextController.text =
+                                      (int.parse(_quantityTextController.text) +
+                                              1)
+                                          .toString();
                                 });
                               },
                               icon: CupertinoIcons.add,
@@ -251,12 +265,14 @@ class _ProductDetailsState extends State<ProductDetails> {
                                     child: Row(
                                   children: [
                                     TextWidget(
-                                        text: '\$${totalPrice.toStringAsFixed(2)}/',
+                                        text:
+                                            '\$${totalPrice.toStringAsFixed(2)}/',
                                         color: color,
                                         textSize: 20,
                                         isTitle: true),
                                     TextWidget(
-                                      text: '${_quantityTextController.text}$unitText',
+                                      text:
+                                          '${_quantityTextController.text}$unitText',
                                       color: color,
                                       textSize: 16,
                                       isTitle: false,
@@ -271,17 +287,31 @@ class _ProductDetailsState extends State<ProductDetails> {
                               borderRadius: BorderRadius.circular(10),
                               child: InkWell(
                                 onTap: () {
-                                  if (isInCart){
+                                  if (isInCart) {
                                     return;
-                                  }else{
-                                    context.read<CartProvider>().addProductsToCart(productId, int.parse(_quantityTextController.text));
+                                  } else {
+                                    final User? user = authInstance.currentUser;
+                                    if (user == null) {
+                                      GlobalMethods.errorDialog(
+                                          subtitle:
+                                              'No user found, Please login first',
+                                          context: context);
+                                      return;
+                                    }
+                                    context
+                                        .read<CartProvider>()
+                                        .addProductsToCart(
+                                            productId,
+                                            int.parse(
+                                                _quantityTextController.text));
                                   }
                                 },
                                 borderRadius: BorderRadius.circular(10),
                                 child: Padding(
                                   padding: const EdgeInsets.all(12.0),
                                   child: TextWidget(
-                                      text: isInCart ? 'In cart' : 'Add to cart',
+                                      text:
+                                          isInCart ? 'In cart' : 'Add to cart',
                                       color: Colors.white,
                                       textSize: 18),
                                 ),
