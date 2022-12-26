@@ -54,5 +54,24 @@
       });
     });
   </script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-analytics.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+  <script>
+    const firebaseConfig = {
+  apiKey: "AIzaSyCtGiYSR_a2C5coC6UOm4CkXZbgVEmJif0",
+  authDomain: "grocery-9428d.firebaseapp.com",
+  projectId: "grocery-9428d",
+  storageBucket: "grocery-9428d.appspot.com",
+  messagingSenderId: "574111371403",
+  appId: "1:574111371403:web:05b40b25aeb16edfa6848e",
+  measurementId: "G-NW9LTCBYB2"
+};
+
+//Inintialize Firebase
+firebase.initializeApp(firebaseConfig);
+firebase.analytics();
+  </script>
 </body>
 </html>

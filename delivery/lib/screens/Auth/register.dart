@@ -1,10 +1,13 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:card_swiper/card_swiper.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:delivery/consts/firebase_consts.dart';
 import 'package:delivery/screens/Auth/login.dart';
 import 'package:delivery/screens/btm_bar.dart';
 import 'package:delivery/services/global_methods.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -59,6 +62,20 @@ bool _isLoading = false;
       _formKey.currentState!.save();
       try{
         await authInstance.createUserWithEmailAndPassword(email: _emailTextController.text.trim(), password: _passTextController.text.trim());
+        final User? user = authInstance.currentUser;
+        final _uid = user!.uid;
+         CollectionReference users = FirebaseFirestore.instance.collection('users');
+         await users.doc(_uid).set(
+          {
+            'id': _uid,
+            'name': _fullNameController.text,
+            'email': _emailTextController.text.toLowerCase(),
+            'shipping-address': _addressTextController.text,
+            'userWish': [],
+            'userCart': [],
+            'createdAt': Timestamp.now()
+          }
+         );
         Navigator.of(context).pushReplacement(MaterialPageRoute(builder: ((context) => const BottomBarScreen())));
       } on FirebaseException catch (error){
         GlobalMethods.errorDialog(subtitle: '${error.message}', context: context);
