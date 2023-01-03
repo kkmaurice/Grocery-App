@@ -1,15 +1,64 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:grocery_admin_panel/inner_screens/edit_prod.dart';
+
 import 'package:grocery_admin_panel/services/utils.dart';
 import 'package:grocery_admin_panel/widgets/text_widget.dart';
 
-class ProductWidget extends StatefulWidget {
-  const ProductWidget({Key? key}) : super(key: key);
+import '../services/global_method.dart';
 
+class ProductWidget extends StatefulWidget {
+  const ProductWidget({
+    Key? key,
+    required this.id,
+  }) : super(key: key);
+final  id;
   @override
   State<ProductWidget> createState() => _ProductWidgetState();
 }
 
 class _ProductWidgetState extends State<ProductWidget> {
+  String title = '';
+  String productCategory = '';
+  String? imageUrl;
+  String price = '0.0';
+  double salePrice = 0.0;
+  bool isOnSale = false;
+  bool isPiece = false;
+
+  @override
+  void initState() {
+    getProductData();
+    super.initState();
+  }
+
+  Future<void> getProductData() async{
+    setState(() {
+    });
+
+    try{
+      DocumentSnapshot productDoc = await FirebaseFirestore.instance.collection('products').doc(widget.id).get();
+      if(productDoc==null){
+        return;
+      }else{
+        setState(() {
+          title = productDoc.get('title');
+   productCategory = productDoc.get('categoryName');
+    imageUrl = productDoc.get('imageUrl');
+   price = productDoc.get('price');
+   salePrice = productDoc.get('salePrice');
+   isOnSale = productDoc.get('isOnSale');
+   isPiece = productDoc.get('isPiece');
+        });
+      }
+    }catch (error){
+      setState(() {
+    });
+    GlobalMethods.errorDialog(subtitle: '$error', context: context);
+    }finally{
+     
+    }
+  }
   @override
   Widget build(BuildContext context) {
     Size size = Utils(context).getScreenSize;
@@ -22,7 +71,17 @@ class _ProductWidgetState extends State<ProductWidget> {
         color: Theme.of(context).cardColor.withOpacity(0.6),
         child: InkWell(
           borderRadius: BorderRadius.circular(12),
-          onTap: (() {}),
+          onTap: (() {
+            Navigator.push(context, MaterialPageRoute(builder: (context) => EditProductScreen(
+              id: widget.id, 
+              title: title, 
+              price: price, 
+              salePrice: salePrice, 
+              productCat: productCategory, 
+              imageUrl: imageUrl??'https://i.ibb.co/PcP9xfK/Tomatoes.png', 
+              isOnSale: isOnSale, 
+              isPiece: isPiece)));
+          }),
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
@@ -35,7 +94,7 @@ class _ProductWidgetState extends State<ProductWidget> {
                     Flexible(
                         flex: 3,
                         child: Image.network(
-                          'https://media.istockphoto.com/id/1159003963/photo/apricot-isolate-apricots-with-slice-on-white-fresh-apricots-with-clipping-path-full-depth-of.jpg?b=1&s=170667a&w=0&k=20&c=Rajx8ONGapWt5xgB6z0MST20Bu04e40CSAICF8b3N8U=',
+                          imageUrl == null ? 'https://i.ibb.co/PcP9xfK/Tomatoes.png': imageUrl!,
                           fit: BoxFit.fill,
                           height: size.width * 0.12,
                         )),
@@ -61,7 +120,7 @@ class _ProductWidgetState extends State<ProductWidget> {
                 Row(
                   children: [
                     TextWidget(
-                      text: '\$1.99',
+                      text: isOnSale ? '\$$salePrice' : '\$$price',
                       color: color,
                       textSize: 18,
                     ),
@@ -69,7 +128,7 @@ class _ProductWidgetState extends State<ProductWidget> {
                       width: 7,
                     ),
                     Visibility(
-                        visible: true,
+                        visible: isOnSale,
                         child: Text(
                           '\$3.89',
                           style: TextStyle(
@@ -78,7 +137,7 @@ class _ProductWidgetState extends State<ProductWidget> {
                         )),
                     const Spacer(),
                     TextWidget(
-                      text: '1Kg',
+                      text: isPiece ? 'Piece' : 'Kg',
                       color: color,
                       textSize: 18,
                     )
@@ -88,7 +147,7 @@ class _ProductWidgetState extends State<ProductWidget> {
                   height: 2,
                 ),
                 TextWidget(
-                  text: 'Title',
+                  text: title,
                   color: color,
                   textSize: 24,
                   isTitle: true,

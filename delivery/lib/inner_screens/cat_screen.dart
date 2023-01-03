@@ -45,7 +45,8 @@ class _FeedsScreenState extends State<CategoryScreenProducts> {
 
     final product = context.watch<ProductModel>();
     final wishListprovider = context.watch<WishListProvider>();
-    bool? isInWishlist = wishListprovider.getWishlistItems.containsKey(product.id);
+    bool? isInWishlist =
+        wishListprovider.getWishlistItems.containsKey(product.id);
 
     return Scaffold(
       appBar: AppBar(
@@ -61,10 +62,10 @@ class _FeedsScreenState extends State<CategoryScreenProducts> {
               color: color,
             ),
           ),
-           HeartBTN(
+          HeartBTN(
             productId: '',
             isInWishlist: isInWishlist,
-            )
+          )
         ],
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         elevation: 0,
@@ -83,7 +84,8 @@ class _FeedsScreenState extends State<CategoryScreenProducts> {
                         controller: _searchController,
                         focusNode: _searchTextFocusNode,
                         onChanged: (value) {
-                          setState(() {});
+                          //setState(() {});
+                          context.read<ProductProvider>().searchQuery(value);
                         },
                         decoration: InputDecoration(
                             focusedBorder: OutlineInputBorder(
@@ -110,19 +112,25 @@ class _FeedsScreenState extends State<CategoryScreenProducts> {
                       ),
                     ),
                   ),
-                  GridView.count(
-                    crossAxisCount: 2,
-                    shrinkWrap: true,
-                    padding: EdgeInsets.zero,
-                    //crossAxisSpacing: 10,
-                    //mainAxisSpacing: 10,
-                    physics: const NeverScrollableScrollPhysics(),
-                    childAspectRatio: size.width / (size.height * 0.6),
-                    children: List.generate(catProducts.length, (index) {
-                      return ChangeNotifierProvider.value(
-                          value: catProducts[index], child: FeedsWidget());
-                    }),
-                  )
+                  context.watch<ProductProvider>().getSearchList.isEmpty
+                      ? const Center(
+                          child:
+                              Text('No products found, please try another key'),
+                        )
+                      : GridView.count(
+                          crossAxisCount: 2,
+                          shrinkWrap: true,
+                          padding: EdgeInsets.zero,
+                          //crossAxisSpacing: 10,
+                          //mainAxisSpacing: 10,
+                          physics: const NeverScrollableScrollPhysics(),
+                          childAspectRatio: size.width / (size.height * 0.6),
+                          children: List.generate(_searchController.text.isEmpty ? catProducts.length : prod.getSearchList.length, (index) {
+                            return ChangeNotifierProvider.value(
+                                value: _searchController.text.isNotEmpty ? prod.getSearchList[index] : catProducts[index],
+                                child: FeedsWidget());
+                          }),
+                        )
                 ],
               ),
             ),

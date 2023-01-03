@@ -10,7 +10,7 @@ class Header extends StatelessWidget {
     Key? key,
     required this.fct,
     required this.title,
-    this.isTextField = true,
+    this.isTextField = true,  bool showTexField = true,
   }) : super(key: key);
 
   final Function fct;

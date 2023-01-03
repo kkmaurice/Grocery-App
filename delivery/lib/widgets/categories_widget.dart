@@ -24,7 +24,8 @@ class CategoriesWidget extends StatelessWidget {
     final _screenSize = MediaQuery.of(context).size;
     return InkWell(
       onTap: () {
-        Navigator.of(context).pushNamed(CategoryScreenProducts.routName, arguments: catText);
+        Navigator.of(context).pushNamed(
+          CategoryScreenProducts.routName, arguments: catText);
       },
       child: Container(
         decoration: BoxDecoration(

@@ -25,6 +25,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  
   @override
   Widget build(BuildContext context) {
     final Utils utils = Utils(context: context);
@@ -39,7 +40,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return SafeArea(
       child: Scaffold(
-        body: SingleChildScrollView(
+        body: FutureBuilder(
+          future: prod.fetchProducts(),
+          builder: ((context, snapshot) {
+            return SingleChildScrollView(
           child: Column(
             children: [
               SizedBox(
@@ -156,7 +160,8 @@ class _HomeScreenState extends State<HomeScreen> {
               )
             ],
           ),
-        ),
+        );
+          }))
       ),
     );
   }

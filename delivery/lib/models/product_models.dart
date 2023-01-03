@@ -20,6 +20,19 @@ class ProductModel with ChangeNotifier {
     required this.isPiece,
   });
 
+  factory ProductModel.fromMap(Map<String, dynamic> data) {
+    return ProductModel(
+      id: data['id'],
+      title: data['title'],
+      imageUrl: data['imageUrl'],
+      productCategory: data['productName'],
+      price: data['price'],
+      salePrice: double.parse(data['salePrice'].toString()),
+      isOnSale: data['isOnSale'],
+      isPiece: data['isPiece'],
+    );
+  }
+
   @override
   String toString() {
     return 'title: $title, imgUrl: $imageUrl, prdCategory: $productCategory, price: $price, salePrice: $salePrice, isOnSale: $isOnSale, isPiece: $isPiece';

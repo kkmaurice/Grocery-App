@@ -19,7 +19,7 @@ class GlobalMethods {
           return AlertDialog(
             title: Row(children: [
               Image.asset(
-                'assets/images/warning-sign.png',
+                'assets/images/warning-sign.png',        
                 height: 20,
                 width: 20,
                 fit: BoxFit.fill,
@@ -56,5 +56,42 @@ class GlobalMethods {
             ],
           );
         });
+  }
+
+    static Future<void> errorDialog(
+      {
+      required String subtitle,
+      required BuildContext context}) async {
+    await showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Row(
+              children: [
+                Image.asset(
+                  'assets/images/warning-sign.png',
+                  width: 20,
+                  height: 20,
+                  fit: BoxFit.fill,
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                const Text('Error occurred')
+              ],
+            ),
+            content: Text(subtitle),
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    if (Navigator.canPop(context)) {
+                      Navigator.pop(context);
+                    }
+                  },
+                  child: TextWidget(
+                      text: 'Ok', color: Colors.cyan, textSize: 18)),
+            ],
+          );
+        });      
   }
 }
