@@ -62,7 +62,7 @@ class ViewedWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         child: InkWell(
           borderRadius: BorderRadius.circular(12),
-          onTap: () {
+          onTap: () async{
             final User? user = authInstance.currentUser;
             if (user == null) {
               GlobalMethods.errorDialog(
@@ -70,7 +70,8 @@ class ViewedWidget extends StatelessWidget {
                   context: context);
               return;
             }
-            CartService().addToCart(viewedCurr.id, 1, context);
+            await CartService().addToCart(viewedCurr.id, 1, context);
+            await cartProvider.fetchCart();
             //cartProvider.addProductsToCart(viewedCurr.id, 1);
           },
           child: Padding(

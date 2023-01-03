@@ -163,8 +163,8 @@ class _CartWidgetState extends State<CartWidget> {
                       child: Column(
                         children: [
                           InkWell(
-                            onTap: () {
-                              context.read<CartProvider>().removeOneItem(cartModel.productId);
+                            onTap: () async{
+                             await context.read<CartProvider>().removeOneItem(cartModel.id, cartModel.productId, cartModel.quantity);
                             },
                             child: const Padding(
                               padding: EdgeInsets.all(6.0),
@@ -183,7 +183,7 @@ class _CartWidgetState extends State<CartWidget> {
                             isInWishlist: isInWishlist,
                             ),
                           TextWidget(
-                              text: '\$$usedPrice',
+                              text: '\$${(usedPrice * int.parse(_quantityTextController.text)).toStringAsFixed(1)}',
                               color: color,
                               textSize: 18,
                               maxLines: 1)

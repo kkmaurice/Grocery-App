@@ -154,10 +154,10 @@ class _FeedsWidgetState extends State<FeedsWidget> {
               SizedBox(
                 width: double.infinity,
                 child: TextButton(
-                  onPressed: () {
-                    // if (isInCart){
-                    //   return;
-                    // }
+                  onPressed: () async{
+                    if (isInCart){
+                      return;
+                    }
                     final User? user = authInstance.currentUser;
                     if (user == null) {
                       GlobalMethods.errorDialog(
@@ -165,7 +165,8 @@ class _FeedsWidgetState extends State<FeedsWidget> {
                           context: context);
                       return;
                     } else {
-                      CartService().addToCart(product.id, int.parse(_quantityController.text), context);
+                      await CartService().addToCart(product.id, int.parse(_quantityController.text), context);
+                      await cartProvider.fetchCart();
                       // cartProvider.addProductsToCart(
                       //     product.id, int.parse(_quantityController.text));
                     }

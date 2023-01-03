@@ -1,10 +1,13 @@
 // ignore_for_file: unused_field, no_leading_underscores_for_local_identifiers
 import 'package:badges/badges.dart';
+import 'package:delivery/consts/firebase_consts.dart';
 import 'package:delivery/providers/cart_provider.dart';
+import 'package:delivery/providers/product_provider.dart';
 import 'package:delivery/screens/categories.dart';
 import 'package:delivery/screens/home_screen.dart';
 import 'package:delivery/screens/user.dart';
 import 'package:delivery/widgets/text_widget.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:provider/provider.dart';
@@ -42,11 +45,11 @@ class _BottomBarScreenState extends State<BottomBarScreen> {
 
     final cartProvider = context.watch<CartProvider>();
     final cart = cartProvider.getCartItems.values.toList();
+    final productProvider = context.watch<ProductProvider>();
+
+    final User? user = authInstance.currentUser;
 
     return Scaffold(
-      // appBar: AppBar(
-      //   title: Text(_pages[_selectedIndex]['title']),
-      // ),
       body: _pages[_selectedIndex]['page'],
       bottomNavigationBar: BottomNavigationBar(
           onTap: _selectedPage,
@@ -76,8 +79,14 @@ class _BottomBarScreenState extends State<BottomBarScreen> {
                     borderRadius: BorderRadius.circular(8),
                     position: BadgePosition.topEnd(top: -7, end: -7),
                     badgeContent: FittedBox(
-                        child: TextWidget(
-                            text: '${cart.length}', color: Colors.white, textSize: 14)),
+                        child: FutureBuilder(
+                            future: user == null? productProvider.fetchProducts() : cartProvider.fetchCart(),
+                            builder: ((context, snapshot) {
+                              return TextWidget(
+                                  text: '${cart.length}',
+                                  color: Colors.white,
+                                  textSize: 14);
+                            }))),
                     child: Icon(_selectedIndex == 2
                         ? IconlyBold.buy
                         : IconlyLight.buy)),

@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:delivery/consts/firebase_consts.dart';
-import 'package:delivery/models/cart_model.dart';
 import 'package:delivery/services/global_methods.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';

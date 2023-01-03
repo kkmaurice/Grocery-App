@@ -287,7 +287,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                               color: Colors.green,
                               borderRadius: BorderRadius.circular(10),
                               child: InkWell(
-                                onTap: () {
+                                onTap: () async{
                                   if (isInCart) {
                                     return;
                                   } else {
@@ -299,7 +299,8 @@ class _ProductDetailsState extends State<ProductDetails> {
                                           context: context);
                                       return;
                                     }
-                                    CartService().addToCart(getCurrProduct.id, int.parse(_quantityTextController.text), context);
+                                    await CartService().addToCart(getCurrProduct.id, int.parse(_quantityTextController.text), context);
+                                    await cartProvider.fetchCart();
                                     // context
                                     //     .read<CartProvider>()
                                     //     .addProductsToCart(
