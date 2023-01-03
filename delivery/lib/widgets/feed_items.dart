@@ -13,6 +13,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../consts/firebase_consts.dart';
+import '../services/cart_service.dart';
 import '../services/global_methods.dart';
 
 class FeedsWidget extends StatefulWidget {
@@ -164,8 +165,9 @@ class _FeedsWidgetState extends State<FeedsWidget> {
                           context: context);
                       return;
                     } else {
-                      cartProvider.addProductsToCart(
-                          product.id, int.parse(_quantityController.text));
+                      CartService().addToCart(product.id, int.parse(_quantityController.text), context);
+                      // cartProvider.addProductsToCart(
+                      //     product.id, int.parse(_quantityController.text));
                     }
                   },
                   style: ButtonStyle(

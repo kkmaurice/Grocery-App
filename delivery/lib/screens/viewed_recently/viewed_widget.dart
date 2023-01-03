@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 
 import '../../consts/firebase_consts.dart';
 import '../../inner_screens/product_details.dart';
+import '../../services/cart_service.dart';
 import '../../services/global_methods.dart';
 import '../../services/utils.dart';
 import '../../widgets/text_widget.dart';
@@ -69,7 +70,8 @@ class ViewedWidget extends StatelessWidget {
                   context: context);
               return;
             }
-            cartProvider.addProductsToCart(viewedCurr.id, 1);
+            CartService().addToCart(viewedCurr.id, 1, context);
+            //cartProvider.addProductsToCart(viewedCurr.id, 1);
           },
           child: Padding(
             padding: const EdgeInsets.all(10.0),

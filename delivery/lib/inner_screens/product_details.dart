@@ -15,6 +15,7 @@ import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:provider/provider.dart';
 
 import '../consts/firebase_consts.dart';
+import '../services/cart_service.dart';
 import '../services/global_methods.dart';
 import '../services/utils.dart';
 
@@ -298,12 +299,13 @@ class _ProductDetailsState extends State<ProductDetails> {
                                           context: context);
                                       return;
                                     }
-                                    context
-                                        .read<CartProvider>()
-                                        .addProductsToCart(
-                                            productId,
-                                            int.parse(
-                                                _quantityTextController.text));
+                                    CartService().addToCart(getCurrProduct.id, int.parse(_quantityTextController.text), context);
+                                    // context
+                                    //     .read<CartProvider>()
+                                    //     .addProductsToCart(
+                                    //         productId,
+                                    //         int.parse(
+                                    //             _quantityTextController.text));
                                   }
                                 },
                                 borderRadius: BorderRadius.circular(10),

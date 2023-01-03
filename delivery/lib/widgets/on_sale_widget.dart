@@ -1,6 +1,7 @@
 import 'package:delivery/inner_screens/product_details.dart';
 import 'package:delivery/models/product_models.dart';
 import 'package:delivery/providers/whislist_provider.dart';
+import 'package:delivery/services/cart_service.dart';
 import 'package:delivery/services/global_methods.dart';
 import 'package:delivery/services/utils.dart';
 import 'package:delivery/widgets/heart_btn.dart';
@@ -28,7 +29,6 @@ class _OnSaleWidgetState extends State<OnSaleWidget> {
   @override
   Widget build(BuildContext context) {
 
-    final theme = Utils(context: context).getTheme;
     final size = Utils(context: context).getScreenSize;
     final Color color = Utils(context: context).color;
 
@@ -84,8 +84,9 @@ class _OnSaleWidgetState extends State<OnSaleWidget> {
                                       context: context);
                                   return;
                                 }
-                                cartProvider.addProductsToCart(
-                                    onSaleproduct.id, 1);
+                                CartService().addToCart(onSaleproduct.id, 1, context);
+                                // cartProvider.addProductsToCart(
+                                //     onSaleproduct.id, 1);
                               },
                               child: Icon(
                                isInCart ? IconlyBold.bag2 : IconlyLight.bag2,
