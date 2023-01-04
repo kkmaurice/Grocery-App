@@ -14,6 +14,7 @@ class CartProvider with ChangeNotifier {
 
 final User? userId = authInstance.currentUser;
 final userCollection = FirebaseFirestore.instance.collection('users');
+
   Future<void> fetchCart() async{
        final _uid = userId!.uid;
     final DocumentSnapshot userDoc = await userCollection.doc(_uid).get();

@@ -1,4 +1,4 @@
-// ignore_for_file: dead_code, no_leading_underscores_for_local_identifiers
+// ignore_for_file: dead_code, no_leading_underscores_for_local_identifiers, use_build_context_synchronously
 
 import 'package:delivery/providers/whislist_provider.dart';
 import 'package:delivery/screens/wishlist/wishlist_widget.dart';
@@ -31,52 +31,56 @@ class WishList extends StatelessWidget {
         .reversed
         .toList();
 
-    return wishList.isEmpty
-        ? SafeArea(
-            child: EmptyScreen(
-                buttontext: 'Add a wish',
-                imagePath: 'assets/images/wishlist.png',
-                title: 'Your wishlist is empty',
-                subtitle: 'Explore more and shortlist some items'),
-          )
-        : Scaffold(
-            appBar: AppBar(
-              leading: const BackWidget(),
-              title: TextWidget(
-                  text: 'Wishlist (${wishList.length})',
-                  color: color,
-                  textSize: 22,
-                  isTitle: true),
-              actions: [
-                IconButton(
-                    onPressed: (() {
-                      GlobalMethods.warningDialog(
-                          title: 'Empty your wishlist',
-                          subtitle: 'Are you sure?',
-                          fct: () {
-                            wishlistProvider.clearWishlist();
-                            Navigator.of(context).pop();
-                          },
-                          context: context);
-                    }),
-                    icon: const Icon(
-                      IconlyBroken.delete,
-                      color: Colors.red,
-                    )),
-                const SizedBox(
-                  width: 10,
-                )
-              ],
-              elevation: 0,
-              centerTitle: true,
-              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-            ),
-            body: MasonryGridView.count(
-                crossAxisCount: 2,
-                itemCount: wishList.length,
-                itemBuilder: (context, index) {
-                  return ChangeNotifierProvider.value(
-                      value: wishList[index], child: const WishListWidget());
-                }));
+    return  FutureBuilder(
+      future: wishlistProvider.fetchWishlist(),
+      builder: (context, snapshot) {
+       return wishList.isEmpty
+          ? SafeArea(
+              child: EmptyScreen(
+                  buttontext: 'Add a wish',
+                  imagePath: 'assets/images/wishlist.png',
+                  title: 'Your wishlist is empty',
+                  subtitle: 'Explore more and shortlist some items'),
+            )
+          : Scaffold(
+              appBar: AppBar(
+                leading: const BackWidget(),
+                title: TextWidget(
+                    text: 'Wishlist (${wishList.length})',
+                    color: color,
+                    textSize: 22,
+                    isTitle: true),
+                actions: [
+                  IconButton(
+                      onPressed: (() {
+                        GlobalMethods.warningDialog(
+                            title: 'Empty your wishlist',
+                            subtitle: 'Are you sure?',
+                            fct: () async{
+                             await wishlistProvider.clearWishlist();
+                              Navigator.of(context).pop();
+                            },
+                            context: context);
+                      }),
+                      icon: const Icon(
+                        IconlyBroken.delete,
+                        color: Colors.red,
+                      )),
+                  const SizedBox(
+                    width: 10,
+                  )
+                ],
+                elevation: 0,
+                centerTitle: true,
+                backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+              ),
+              body: MasonryGridView.count(
+                  crossAxisCount: 2,
+                  itemCount: wishList.length,
+                  itemBuilder: (context, index) {
+                    return ChangeNotifierProvider.value(
+                        value: wishList[index], child: const WishListWidget());
+            }));}
+    );
   }
 }
