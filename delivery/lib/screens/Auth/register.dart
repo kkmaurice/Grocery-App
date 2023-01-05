@@ -55,15 +55,18 @@ bool _isLoading = false;
   void _submitFormOnRegister() async{
     final bool isValid = _formKey.currentState!.validate();
     FocusScope.of(context).unfocus();
-    setState(() {
-      _isLoading = true;
-    });
+
     if (isValid) {
       _formKey.currentState!.save();
+      setState(() {
+      _isLoading = true;
+    });
       try{
         await authInstance.createUserWithEmailAndPassword(email: _emailTextController.text.trim(), password: _passTextController.text.trim());
         final User? user = authInstance.currentUser;
         final _uid = user!.uid;
+        user.updateDisplayName(_fullNameController.text);
+        user.reload();
          CollectionReference users = FirebaseFirestore.instance.collection('users');
          await users.doc(_uid).set(
           {

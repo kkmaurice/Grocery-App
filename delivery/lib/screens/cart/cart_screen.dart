@@ -1,5 +1,6 @@
 // ignore_for_file: dead_code
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:delivery/consts/firebase_consts.dart';
 import 'package:delivery/providers/cart_provider.dart';
 import 'package:delivery/providers/product_provider.dart';
@@ -11,7 +12,9 @@ import 'package:delivery/widgets/text_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
+import 'package:uuid/uuid.dart';
 
 class CartScreen extends StatelessWidget {
   const CartScreen({super.key});
@@ -106,7 +109,37 @@ class CartScreen extends StatelessWidget {
               borderRadius: BorderRadius.circular(10),
               child: InkWell(
                 borderRadius: BorderRadius.circular(10),
-                onTap: () {},
+                onTap: () async{
+                  final productProvider = Provider.of<ProductProvider>(context, listen: false);
+                  User? user = authInstance.currentUser;
+                  final orderId = const Uuid().v4();
+                  cartProvider.getCartItems.forEach((key, value) async{ 
+                  final currProd = productProvider.findProdById(value.productId);
+                    try {
+                  await FirebaseFirestore.instance.collection('orders').doc(orderId).set({
+                    'orderId': orderId,
+                    'userId': user!.uid,
+                    'productId': value.productId,
+                    'price': (currProd.isOnSale? currProd.salePrice: currProd.price)*value.quantity,
+                    'total': total,
+                    'title': currProd.title,
+                    'quantity': value.quantity,
+                    'imageUrl': currProd.imageUrl,
+                    'userName': user.displayName,
+                    'orderDate': Timestamp.now()
+                  });
+                  await cartProvider.clearCart();
+                  await Fluttertoast.showToast(
+                    msg: 'Your order has been placed',
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.CENTER
+                    );
+                  } catch (e) {
+                    GlobalMethods.errorDialog(subtitle: '$e', context: context);
+                  }
+                  });
+                  
+                },
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: TextWidget(
