@@ -48,11 +48,12 @@ class _LoginScreenState extends State<LoginScreen> {
   void _submitFormOnLogin() async{
     final bool isValid = _formKey.currentState!.validate();
     FocusScope.of(context).unfocus();
-    setState(() {
-      _isLoading = true;
-    });
+    
     if (isValid) {
       _formKey.currentState!.save();
+      setState(() {
+      _isLoading = true;
+    });
       try{
         await authInstance.signInWithEmailAndPassword(email: _emailTextController.text.trim(), password: _passTextController.text.trim());
         Navigator.of(context).pushReplacement(MaterialPageRoute(builder: ((context) => const BottomBarScreen())));

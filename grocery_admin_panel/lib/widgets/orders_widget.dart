@@ -1,18 +1,32 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+
 import 'package:grocery_admin_panel/services/utils.dart';
 
 import 'text_widget.dart';
 
 class OrdersWidget extends StatefulWidget {
-  const OrdersWidget({Key? key}) : super(key: key);
-
+  const OrdersWidget({
+    Key? key,
+    required this.totalPrice,
+    required this.userName,
+    required this.quantity,
+    required this.orderDate, required this.price, required this.productId, required this.userId, required this.imageUrl,
+  }) : super(key: key);
+  final double price, totalPrice;
+  final String productId, userId, imageUrl, userName;
+  final int quantity;
+  final Timestamp orderDate;
   @override
   _OrdersWidgetState createState() => _OrdersWidgetState();
 }
 
 class _OrdersWidgetState extends State<OrdersWidget> {
+  late String orderDateStr;
   @override
   void initState() {
+    var postDate = widget.orderDate.toDate();
+    orderDateStr = '${postDate.day}/${postDate.month}/${postDate.year}';
     super.initState();
   }
 
@@ -35,8 +49,7 @@ class _OrdersWidgetState extends State<OrdersWidget> {
               Flexible(
                 flex: size.width < 750 ? 3 : 1,
                 child: Image.network(
-                  'https://media.istockphoto.com/id/1159003963/photo/apricot-isolate-apricots-with-slice-on-white-fresh-apricots-with-clipping-path-full-depth-of.jpg?b=1&s=170667a&w=0&k=20&c=Rajx8ONGapWt5xgB6z0MST20Bu04e40CSAICF8b3N8U=',
-        
+                  widget.imageUrl,
                   fit: BoxFit.fill,
                   // height: screenWidth * 0.15,
                   // width: screenWidth * 0.15,
@@ -52,7 +65,7 @@ class _OrdersWidgetState extends State<OrdersWidget> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     TextWidget(
-                      text: '12x For \$19.9',
+                      text: '${widget.quantity}x For \$${widget.price.toStringAsFixed(2)}',
                       color: color,
                       textSize: 16,
                       isTitle: true,
@@ -66,17 +79,12 @@ class _OrdersWidgetState extends State<OrdersWidget> {
                             textSize: 16,
                             isTitle: true,
                           ),
-                          TextWidget(
-                            text: '  Hadi K.',
-                            color: color,
-                            textSize: 14,
-                            isTitle: true,
-                          ),
+                          Text(widget.userName)
                         ],
                       ),
                     ),
-                    const Text(
-                      '20/03/2022',
+                     Text(
+                      orderDateStr,
                     )
                   ],
                 ),
