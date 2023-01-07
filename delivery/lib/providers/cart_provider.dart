@@ -18,6 +18,7 @@ final userCollection = FirebaseFirestore.instance.collection('users');
   Future<void> fetchCart() async{
        final _uid = userId!.uid;
     final DocumentSnapshot userDoc = await userCollection.doc(_uid).get();
+    //print(userDoc['userCart']);
     if(userDoc == null){
       return;
     }

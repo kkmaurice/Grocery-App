@@ -1,15 +1,18 @@
 // ignore_for_file: dead_code, no_leading_underscores_for_local_identifiers, use_build_context_synchronously
 
+import 'package:delivery/providers/product_provider.dart';
 import 'package:delivery/providers/whislist_provider.dart';
 import 'package:delivery/screens/wishlist/wishlist_widget.dart';
 import 'package:delivery/services/utils.dart';
 import 'package:delivery/widgets/back_widget.dart';
 import 'package:delivery/widgets/text_widget.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:provider/provider.dart';
 
+import '../../consts/firebase_consts.dart';
 import '../../services/global_methods.dart';
 import '../../widgets/empty_screen.dart';
 
@@ -30,9 +33,9 @@ class WishList extends StatelessWidget {
         .toList()
         .reversed
         .toList();
-
+final User? user = authInstance.currentUser;
     return  FutureBuilder(
-      future: wishlistProvider.fetchWishlist(),
+      future: user == null ? context.watch<ProductProvider>().fetchProducts() : wishlistProvider.fetchWishlist(),
       builder: (context, snapshot) {
        return wishList.isEmpty
           ? SafeArea(

@@ -1,4 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:delivery/consts/firebase_consts.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 
 import '../models/orders_model.dart';
@@ -8,8 +10,9 @@ class OrderService{
 
 // get products from the firebase
   Future getOrders() async{
+    User? user = authInstance.currentUser;
     try{
-      var myDocuments = await  _ref.get();
+      var myDocuments = await  _ref.where('userId', isEqualTo: user!.uid).get();
     if (myDocuments.docs.isNotEmpty){
       return myDocuments
               .docs
