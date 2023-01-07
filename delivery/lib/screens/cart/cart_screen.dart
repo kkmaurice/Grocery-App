@@ -85,7 +85,7 @@ class CartScreen extends StatelessWidget {
         );
   }}
 
-  Widget _checkout({required BuildContext context}) {
+  Widget _checkout({required BuildContext context,}) {
     final size = Utils(context: context).getScreenSize;
     final Color color = Utils(context: context).color;
 

@@ -324,7 +324,7 @@ class ProductProvider with ChangeNotifier{
   }
   // Find products by category
   List<ProductModel> findByCategory(String categoryName){
-    return _productsList.where((element) => element.productCategory.toLowerCase().contains(categoryName)).toList();
+    return _productsList.where((element) => element.productCategory.toLowerCase().contains(categoryName.toLowerCase())).toList();
   }
 
   // Search for products

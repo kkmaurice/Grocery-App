@@ -44,8 +44,9 @@ class GoogleButton extends StatelessWidget {
       accessToken: googleAuth?.accessToken,
       idToken: googleAuth?.idToken,
     );
+
     Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: ((context) => BottomBarScreen())));
+        MaterialPageRoute(builder: ((context) => const BottomBarScreen())));
     // Once signed in, return the UserCredential
     return await FirebaseAuth.instance.signInWithCredential(credential);
   }

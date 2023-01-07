@@ -68,7 +68,7 @@ class _ProductDetailsState extends State<ProductDetails> {
 
     return WillPopScope(
       onWillPop: () async {
-        context.read<ViewedProdProvider>().addProductToHistory(productId);
+        // context.read<ViewedProdProvider>().addProductToHistory(productId);
         return true;
       },
       child: Scaffold(

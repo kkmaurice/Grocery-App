@@ -17,6 +17,7 @@ import 'package:provider/provider.dart';
 
 import '../consts/firebase_consts.dart';
 import '../providers/cart_provider.dart';
+import '../providers/viewed_prod_provider.dart';
 
 class OnSaleWidget extends StatefulWidget {
   const OnSaleWidget({super.key});
@@ -47,6 +48,7 @@ class _OnSaleWidgetState extends State<OnSaleWidget> {
         child: InkWell(
           borderRadius: BorderRadius.circular(12),
           onTap: () {
+            context.read<ViewedProdProvider>().addProductToHistory(onSaleproduct.id);
             Navigator.of(context).pushNamed(ProductDetails.routeName, arguments: onSaleproduct.id);
             // GlobalMethods.navigateTo(context: context, routeName: ProductDetails.routeName);
           },

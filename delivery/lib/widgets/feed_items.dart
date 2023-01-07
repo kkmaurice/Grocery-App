@@ -13,6 +13,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../consts/firebase_consts.dart';
+import '../providers/viewed_prod_provider.dart';
 import '../services/cart_service.dart';
 import '../services/global_methods.dart';
 
@@ -51,6 +52,7 @@ class _FeedsWidgetState extends State<FeedsWidget> {
     bool? isInCart = cartProvider.getCartItems.containsKey(product.id);
     bool? isInWishlist =
         wishlistProvider.getWishlistItems.containsKey(product.id);
+    
 
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -59,6 +61,7 @@ class _FeedsWidgetState extends State<FeedsWidget> {
         color: Theme.of(context).cardColor,
         child: InkWell(
           onTap: () {
+            context.read<ViewedProdProvider>().addProductToHistory(product.id);
             Navigator.of(context)
                 .pushNamed(ProductDetails.routeName, arguments: product.id);
           },
