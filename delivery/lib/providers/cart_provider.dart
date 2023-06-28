@@ -33,6 +33,7 @@ final userCollection = FirebaseFirestore.instance.collection('users');
     notifyListeners();
   }
 
+// something to try
 
   void increaseQuantityByOne(String productId){
     _cartItem.update(productId, (value) => CartModel(id: value.id, productId: productId, quantity: value.quantity + 1));

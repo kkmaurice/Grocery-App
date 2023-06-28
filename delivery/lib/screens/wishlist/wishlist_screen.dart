@@ -23,7 +23,7 @@ class WishList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final size = Utils(context: context).getScreenSize;
+    //final size = Utils(context: context).getScreenSize;
     final Color color = Utils(context: context).color;
     final wishlistProvider = context.watch<WishListProvider>();
     final wishList = context

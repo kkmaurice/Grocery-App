@@ -2,8 +2,7 @@ import 'package:delivery/services/utils.dart';
 import 'package:delivery/widgets/categories_widget.dart';
 import 'package:delivery/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
+
 
 class CategoryScreen extends StatelessWidget {
   const CategoryScreen({super.key});
