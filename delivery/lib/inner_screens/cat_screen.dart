@@ -1,4 +1,3 @@
-import 'package:delivery/consts/contss.dart';
 import 'package:delivery/services/utils.dart';
 import 'package:delivery/widgets/back_widget.dart';
 import 'package:delivery/widgets/empty_cat_prd.dart';

@@ -1,5 +1,5 @@
 // ignore_for_file: unused_field, no_leading_underscores_for_local_identifiers
-import 'package:badges/badges.dart';
+import 'package:badges/badges.dart' as bg;
 import 'package:delivery/consts/firebase_consts.dart';
 import 'package:delivery/providers/cart_provider.dart';
 import 'package:delivery/providers/product_provider.dart';
@@ -72,12 +72,14 @@ class _BottomBarScreenState extends State<BottomBarScreen> {
                     : IconlyLight.category),
                 label: 'Categories'),
             BottomNavigationBarItem(
-                icon: Badge(
+                icon: bg.Badge(
                     toAnimate: true,
-                    shape: BadgeShape.circle,
+                    shape: bg.BadgeShape.circle,
                     badgeColor: Colors.blue,
                     borderRadius: BorderRadius.circular(8),
-                    position: BadgePosition.topEnd(top: -7, end: -7),
+                    position: bg.BadgePosition.topEnd(top: -7, end: -7),
+                    
+                 
                     badgeContent: FittedBox(
                         child: FutureBuilder(
                             future: user == null? productProvider.fetchProducts() : cartProvider.fetchCart(),

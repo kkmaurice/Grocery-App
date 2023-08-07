@@ -27,7 +27,7 @@ final userCollection = FirebaseFirestore.instance.collection('users');
 
   Future<void> fetchWishlist() async{
     final User? userId = authInstance.currentUser;
-    final _uid = userId!.uid;
+    final _uid = userId?.uid ?? '';
     final DocumentSnapshot userDoc = await userCollection.doc(_uid).get();
     if(userDoc == null){
       return;

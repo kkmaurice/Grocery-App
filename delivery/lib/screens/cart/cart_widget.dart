@@ -10,6 +10,8 @@ import 'package:provider/provider.dart';
 
 import '../../inner_screens/product_details.dart';
 import '../../services/utils.dart';
+import '../../widgets/heart_btn.dart';
+import '../../widgets/text_widget.dart';
 
 class CartWidget extends StatefulWidget {
   const CartWidget({
@@ -46,12 +48,16 @@ class _CartWidgetState extends State<CartWidget> {
     final cartModel = context.watch<CartModel>();
     final getCurrentProduct = productProvider.findProdById(cartModel.productId);
     final wishListProvider = context.watch<WishListProvider>();
-    final double usedPrice = getCurrentProduct.isOnSale ? getCurrentProduct.salePrice: getCurrentProduct.price;
-     bool? isInWishlist = wishListProvider.getWishlistItems.containsKey(getCurrentProduct.id);
+    final double usedPrice = getCurrentProduct.isOnSale
+        ? getCurrentProduct.salePrice
+        : getCurrentProduct.price;
+    bool? isInWishlist =
+        wishListProvider.getWishlistItems.containsKey(getCurrentProduct.id);
 
     return GestureDetector(
       onTap: () {
-        Navigator.of(context).pushNamed(ProductDetails.routeName, arguments: cartModel.productId);
+        Navigator.of(context).pushNamed(ProductDetails.routeName,
+            arguments: cartModel.productId);
       },
       child: Row(
         children: [
@@ -95,19 +101,22 @@ class _CartWidgetState extends State<CartWidget> {
                             children: [
                               _quantityController(
                                   fct: () {
-                                    if(_quantityTextController.text=='1'){
+                                    if (_quantityTextController.text == '1') {
                                       return;
-                                    }else{
-                                      context.read<CartProvider>().decreaseQuantityByOne(cartModel.productId);
-                                     setState(() {
+                                    } else {
+                                      context
+                                          .read<CartProvider>()
+                                          .decreaseQuantityByOne(
+                                              cartModel.productId);
+                                      setState(() {
                                         _quantityTextController.text =
                                             (int.parse(_quantityTextController
                                                         .text) -
                                                     1)
                                                 .toString();
-                                      }); 
+                                      });
                                     }
-                                    },
+                                  },
                                   icon: CupertinoIcons.minus,
                                   color: Colors.red),
                               Flexible(
@@ -137,7 +146,10 @@ class _CartWidgetState extends State<CartWidget> {
                               ),
                               _quantityController(
                                   fct: () {
-                                    context.read<CartProvider>().increaseQuantityByOne(cartModel.productId);
+                                    context
+                                        .read<CartProvider>()
+                                        .increaseQuantityByOne(
+                                            cartModel.productId);
                                     setState(() {
                                       _quantityTextController.text = (int.parse(
                                                   _quantityTextController
@@ -159,8 +171,11 @@ class _CartWidgetState extends State<CartWidget> {
                       child: Column(
                         children: [
                           InkWell(
-                            onTap: () async{
-                             await context.read<CartProvider>().removeOneItem(cartModel.id, cartModel.productId, cartModel.quantity);
+                            onTap: () async {
+                              await context.read<CartProvider>().removeOneItem(
+                                  cartModel.id,
+                                  cartModel.productId,
+                                  cartModel.quantity);
                             },
                             child: const Padding(
                               padding: EdgeInsets.all(6.0),
@@ -174,12 +189,13 @@ class _CartWidgetState extends State<CartWidget> {
                           const SizedBox(
                             height: 5,
                           ),
-                           HeartBTN(
+                          HeartBTN(
                             productId: getCurrentProduct.id,
                             isInWishlist: isInWishlist,
-                            ),
+                          ),
                           TextWidget(
-                              text: '\$${(usedPrice * int.parse(_quantityTextController.text)).toStringAsFixed(1)}',
+                              text:
+                                  '\$${(usedPrice * int.parse(_quantityTextController.text)).toStringAsFixed(1)}',
                               color: color,
                               textSize: 18,
                               maxLines: 1)
